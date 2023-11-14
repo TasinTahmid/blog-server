@@ -6,11 +6,11 @@ const register = async(req, res) => {
     try {
         const { username, email, password } = req.body;
 
-        const emailExists = await User.findOne({
+        const user = await User.findOne({
             where: { email }
         });
 
-        if(emailExists){
+        if(user){
             return res.status(400).send({"messege": "User already exists with this email."});
         }
 
@@ -44,6 +44,8 @@ const login = async(req, res) => {
         if(!isMatch) return res.status(400).send({"messege": "Invalid credentials."});
         
         const token = jwt.sign({id: user.id}, "secret-key");
+
+        
 
         res.status(200).send({ token });
 
