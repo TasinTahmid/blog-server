@@ -1,21 +1,18 @@
 const express = require("express");
 const app = express();
-const authRoutes = require("./modules/auth/auth.routes");
-const sequelize = require("./utils/database");
+const v1Routes = require('./routes');
+const wrongRouteHandler = require('./allHandlers/routeHandlers/wrongRouteHandler');
 
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/', v1Routes);
+app.use('/*', wrongRouteHandler);
 
 app.get('/', (req, res) => {
     res.status(200).send("Welcome to blog-server!!!");
 });
-
-sequelize.sync()
-    .then(()=>{console.log('connected successfully')})
-    .catch(()=>{console.log('not conneted')});
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
