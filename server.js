@@ -10,10 +10,6 @@ app.use(express.json());
 app.use('/api/v1/', v1Routes);
 app.use('/*', wrongRouteHandler);
 
-app.get('/', (req, res) => {
-    res.status(200).send("Welcome to blog-server!!!");
-});
-
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 });

@@ -2,10 +2,12 @@ const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const { findOneUser } = require('../repositories/user.repository');
 const createToken = require('../utils/create-token');
+const { parseUserInfoForLogin } = require("../dto/user.dto");
 
-
-const loginService = async(email, password) => {
+const loginService = async(body) => {
     try {
+        const { email, password } = parseUserInfoForLogin(body);
+
         const returnValue = {};
         const user = await findOneUser(email);
 
@@ -13,7 +15,6 @@ const loginService = async(email, password) => {
             returnValue.err = "User not found.";
             returnValue.status = 404;
             return returnValue;
-
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -28,8 +29,7 @@ const loginService = async(email, password) => {
         return returnValue;
 
     } catch (error) {
-        console.log(error);
-        res.status(500).send({"messege": "Internal server error."});    
+        return error;   
     }
 };
 

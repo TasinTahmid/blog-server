@@ -4,9 +4,8 @@ const findOneUser = async (email) => {
     try {
         return await User.findOne({ where: { email } });
 
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send({"messege": "Internal server error."});    
+    } catch (error) {        
+        return error;   
     }
 }
 
@@ -19,8 +18,7 @@ const createOneUser = async (username, email, hashPassword) => {
         });
 
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({"messege": "Internal server error."});        
+        return error;           
     }
     
 }

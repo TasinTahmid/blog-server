@@ -4,9 +4,7 @@ const { parseUserInfoForRegistration, parseUserInfoForLogin } = require("../dto/
 
 const register = async(req, res) => {
     try {
-        const { username, email, password } = parseUserInfoForRegistration(req.body);
-
-        const token = await registrationService(username, email, password); 
+        const token = await registrationService(req.body); 
 
         if(!token) return res.status(400).send({"messege": "User already exists."});
 
@@ -21,9 +19,7 @@ const register = async(req, res) => {
 
 const login = async(req, res) => {
     try {
-        const { email, password } = parseUserInfoForLogin(req.body);
-
-        const returnValue = await loginService(email, password);
+        const returnValue = await loginService(req.body);
         if(returnValue.err) return res.status(returnValue.status).send({"messege": returnValue.err});
 
         res.cookie("access-token", returnValue.token, { maxAge: 3600*1000});
