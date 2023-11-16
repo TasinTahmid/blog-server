@@ -1,37 +1,37 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../models/user.model");
-const {registration} = require("../services/registration.service");
+const { registrationService } = require("../services/registration.service");
 const { loginService } = require("../services/login.service");
+const { parseUserInfoForRegistration, parseUserInfoForLogin } = require("../dto/user.dto");
 
 const register = async(req, res) => {
     try {
+        const { username, email, password } = parseUserInfoForRegistration(req.body);
 
-        const { username, email, password } = req.body;
+        const token = await registrationService(username, email, password); 
 
-        const newUser = await registration(username, email, password);
-        
-        
+        if(!token) return res.status(400).send({"messege": "User already exists."});
 
-        res.status(201).send(newUser);
+        res.cookie("access-token", token, { maxAge: 3600*1000});
+        return res.status(201).send("User registration successful.");
+
     } catch (error) {
         console.log(error.messege);
-        res.status(500).send({"messege": "Internal server error000."});
+        return res.status(500).send({"messege": "Internal server error."});
     }
 };
 
 const login = async(req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password } = parseUserInfoForLogin(req.body);
 
-        const token = await loginService(email, password);
+        const returnValue = await loginService(email, password);
+        if(returnValue.err) return res.status(returnValue.status).send({"messege": returnValue.err});
 
-        res.cookie("access-token", token, { maxAge: 3600*1000});
-        res.status(200).send("User logged in successfully.");
+        res.cookie("access-token", returnValue.token, { maxAge: 3600*1000});
+        return res.status(200).send("User logged in successfully.");
 
     } catch (error) {
         console.log(error.messege);
-        res.status(500).send({"messege": "Internal server error."});    
+        return res.status(500).send({"messege": "Internal server error."});    
     }
 };
 

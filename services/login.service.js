@@ -1,19 +1,31 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const { findOneUser } = require('../repositories/user.repository');
+const createToken = require('../utils/create-token');
 
 
 const loginService = async(email, password) => {
     try {
+        const returnValue = {};
         const user = await findOneUser(email);
 
-        if(!user) return res.status(404).send({"messege": "User not found."});
+        if(!user) {
+            returnValue.err = "User not found.";
+            returnValue.status = 404;
+            return returnValue;
+
+        }
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if(!isMatch) return res.status(400).send({"messege": "Invalid credentials."});
-        
-        return jwt.sign({id: user.id}, "secret-key");
+        if(!isMatch) {
+            returnValue.err = "Invalid credentials.";
+            returnValue.status = 400;
+            return returnValue;
+
+        }
+
+        returnValue.token = createToken(user.username);
+        return returnValue;
 
     } catch (error) {
         console.log(error);
