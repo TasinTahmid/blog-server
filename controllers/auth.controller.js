@@ -1,23 +1,23 @@
-const { registrationService } = require("../services/registration.service");
-const { loginService } = require("../services/login.service");
-const { parseUserInfoForRegistration, parseUserInfoForLogin } = require("../dto/user.dto");
+const { registrationService, loginService } = require("../services/auth.service");
 
-const register = async(req, res) => {
+const register = async(req, res, next) => {
     try {
-        const token = await registrationService(req.body); 
+        const returnValue = await registrationService(req.body, next); 
+        console.log("token", returnValue)
 
-        if(!token) return res.status(400).send({"messege": "User already exists."});
+        if(returnValue?.err) return res.status(returnValue.status).send({"messege": returnValue.err});
 
-        res.cookie("access-token", token, { maxAge: 3600*1000});
+        res.cookie("access-token", returnValue?.token, { maxAge: 3600*1000});
         return res.status(201).send("User registration successful.");
 
     } catch (error) {
-        console.log(error.messege);
-        return res.status(500).send({"messege": "Internal server error."});
+        console.log("err in regi controller", error);
+        next(error);
+        // return res.status(500).send({"messege": "Internal server error44."});
     }
 };
 
-const login = async(req, res) => {
+const login = async(req, res, next) => {
     try {
         const returnValue = await loginService(req.body);
         if(returnValue.err) return res.status(returnValue.status).send({"messege": returnValue.err});
