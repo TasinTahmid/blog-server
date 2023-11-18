@@ -1,12 +1,12 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
-const { findOneUser } = require('../repositories/user.repository');
+const { findOneUser, createOneUser } = require('../repositories/user.repository');
 const createToken = require('../utils/create-token');
-const { parseUserInfoForLogin, parseUserInfoForRegistration } = require("../dto/user.dto");
+const { UserForRegistration, UserForLogin } = require("../dto/user.dto");
 
 const registrationService = async( body, next ) => {
     try {
-        const { username, email, password } = parseUserInfoForRegistration(body);
+        const { username, email, password } = new UserForRegistration(body);
 
         const returnValue = {};
 
@@ -34,7 +34,7 @@ const registrationService = async( body, next ) => {
 
 const loginService = async(body) => {
     try {
-        const { email, password } = parseUserInfoForLogin(body);
+        const { email, password } = new UserForLogin(body);
 
         const returnValue = {};
         const user = await findOneUser(email);

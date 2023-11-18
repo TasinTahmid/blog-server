@@ -1,9 +1,16 @@
-const parseUserInfoForRegistration = (body) => {
-    return { username, email, password } = body;
+class UserForRegistration{
+    constructor(body){
+        this.username = body.username;
+        this.email = body.email;
+        this.password = body.password;
+    }
 }
 
-const parseUserInfoForLogin = (body) => {
-    return { email, password } = body;
+class UserForLogin{
+    constructor(body){
+        this.email = body.email;
+        this.password = body.password;
+    }
 }
 
-module.exports = { parseUserInfoForRegistration, parseUserInfoForLogin };
+module.exports = { UserForRegistration, UserForLogin };
