@@ -4,7 +4,7 @@ const { findOneUser, createOneUser } = require('../repositories/user.repository'
 const createToken = require('../utils/create-token');
 const { UserForRegistration, UserForLogin } = require("../dto/user.dto");
 
-const registrationService = async( body, next ) => {
+const registrationService = async( body ) => {
     try {
         const { username, email, password } = new UserForRegistration(body);
 
@@ -19,7 +19,7 @@ const registrationService = async( body, next ) => {
         
         const salt = await bcrypt.genSalt();
         const hashPassword = await bcrypt.hash(password, salt);
-        
+
         const newUser = await createOneUser(username, email, hashPassword);
 
         return createToken(newUser.username);   

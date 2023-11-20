@@ -2,7 +2,7 @@ const { registrationService, loginService } = require("../services/auth.service"
 
 const register = async(req, res, next) => {
     try {
-        const token = await registrationService(req.body, next); 
+        const token = await registrationService(req.body); 
 
         res.cookie("access-token", token, { maxAge: 3600*1000});
         return res.status(201).send("User registration successful.");
