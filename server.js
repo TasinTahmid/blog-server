@@ -1,16 +1,17 @@
 const express = require("express");
 const app = express();
-const authRoutes = require("./modules/auth/auth.routes");
+const v1Routes = require('./routes');
+const wrongRouteHandler = require('./allHandlers/routeHandlers/wrongRouteHandler');
+const erroHandler = require("./middlewares/error-handler.middleware");
 
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/', v1Routes);
+app.use('/*', wrongRouteHandler);
 
-app.get('/', (req, res) => {
-    res.status(200).send("Welcome to blog-server!!!");
-});
+app.use(erroHandler);
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
