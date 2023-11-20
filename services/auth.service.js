@@ -8,27 +8,23 @@ const registrationService = async( body, next ) => {
     try {
         const { username, email, password } = new UserForRegistration(body);
 
-        const returnValue = {};
-
         const user = await findOneUser(email);
     
         if(user) {
-            returnValue.err = "User already exists.";
-            returnValue.status = 400;
-            return returnValue;
+            const error = new Error("User already exists.");
+            error.message = "User already exists.";
+            error.status = 400;
+            throw error;
         }
         
         const salt = await bcrypt.genSalt();
         const hashPassword = await bcrypt.hash(password, salt);
-        console.log("hi")
+        
         const newUser = await createOneUser(username, email, hashPassword);
-        console.log("by")
-        return returnValue.token = createToken(newUser.username);
-    } catch (error) {
-        // returnValue.err = error;
-        // returnValue.status = 500;
-        // return { err: error, status:500};
-        next(error);
+
+        return createToken(newUser.username);   
+    } catch (error) {   
+        throw error;
     }
 }
 
@@ -36,28 +32,26 @@ const loginService = async(body) => {
     try {
         const { email, password } = new UserForLogin(body);
 
-        const returnValue = {};
         const user = await findOneUser(email);
 
         if(!user) {
-            returnValue.err = "User not found.";
-            returnValue.status = 404;
-            return returnValue;
+            const error = new Error("User not found.");
+            error.message = "User not found.";
+            error.status = 404;
+            throw error;
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if(!isMatch) {
-            returnValue.err = "Invalid credentials.";
-            returnValue.status = 400;
-            return returnValue;
-
+            const error = new Error("Invalid credentials");
+            error.message = "Invalid credentials";
+            error.status = 400;
+            throw error;
         }
 
-        returnValue.token = createToken(user.username);
-        return returnValue;
-
+        return createToken(user.username);
     } catch (error) {
-        return error;   
+        throw error;
     }
 };
 

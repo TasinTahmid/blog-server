@@ -1,4 +1,7 @@
 class UserForRegistration{
+    username;
+    email;
+    password;
     constructor(body){
         this.username = body.username;
         this.email = body.email;

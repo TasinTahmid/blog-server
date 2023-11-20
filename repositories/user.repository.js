@@ -5,7 +5,7 @@ const findOneUser = async (email) => {
         return await User.findOne({ where: { email } });
 
     } catch (error) {        
-        return error;   
+        throw error;   
     }
 }
 
@@ -18,7 +18,7 @@ const createOneUser = async (username, email, hashPassword) => {
         });
 
     } catch (error) {
-        return error;           
+        throw error;           
     }
     
 }

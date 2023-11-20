@@ -1,4 +1,8 @@
-module.exports = (error, req, res, next) => {
-    console.log("error from global handler")
-    return res.status(500).send("Internal server error66666666.");
+module.exports = (err, req, res, next) => {
+    console.log("error from global handler", err)
+
+    const errStatus = err.status || 500;
+    const errMsg = err.status ? err.message : "Internal server error";
+    
+    return res.status(errStatus).send(errMsg);
 }
