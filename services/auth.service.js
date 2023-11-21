@@ -34,6 +34,8 @@ const loginService = async(body) => {
 
         const user = await findOneUser(email);
 
+        console.log("user from login service:", typeof user)
+
         if(!user) {
             const error = new Error("User not found.");
             error.message = "User not found.";

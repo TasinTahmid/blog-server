@@ -9,6 +9,15 @@ const findOneUser = async (email) => {
     }
 }
 
+const findUserById = async (id) => {
+    try {
+        return await User.findOne({ where: { id } });
+
+    } catch (error) {        
+        throw error;   
+    }
+}
+
 const createOneUser = async (username, email, hashPassword) => {
     try {
         return await User.create({
@@ -23,4 +32,4 @@ const createOneUser = async (username, email, hashPassword) => {
     
 }
 
-module.exports = { findOneUser, createOneUser };
+module.exports = { findOneUser, createOneUser, findUserById };
