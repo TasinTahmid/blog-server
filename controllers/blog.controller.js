@@ -6,7 +6,7 @@ const createNewBlog = async(req, res, next) => {
     try {
         const { title, blogContent, userId } = req.body;
 
-        const newBlog = await createBlog({ title , blogContent, userId });
+        const newBlog = await createBlog({ title, blogContent, userId });
 
         return res.status(201).send(newBlog);
 
