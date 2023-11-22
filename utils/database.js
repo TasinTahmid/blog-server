@@ -10,8 +10,9 @@ sequelize
     .then(() => {
         console.log("connected successfully");
     })
-    .catch(() => {
+    .catch((e) => {
         console.log("not conneted");
+        console.log('from db.js',e)
     });
 
 module.exports = sequelize;

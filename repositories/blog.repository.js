@@ -3,7 +3,8 @@ const Blog = require("../models/blog.model");
 
 const createBlog = async ({ title, blogContent, userId }) => {
     try {
-        return await Blog.create({ title, blogContent, userId });
+        const blog = await Blog.create({ title, blogContent, userId });
+        return blog;
         
     } catch (error) {
         throw error;

@@ -18,8 +18,6 @@ const Blog = sequelize.define("Blog", {
     },
     userId: {
         type: Datatypes.UUID,
-        defaultValue: Datatypes.UUIDV4,
-        allowNull: false,
     }
 });
 

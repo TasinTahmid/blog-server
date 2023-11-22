@@ -1,10 +1,17 @@
-const Blog = require("../models/blog.model");
+const { findUserById } = require("../repositories/user.repository");
 const { createBlog, getBlogs, getBlogById, updateCurrentBlog, deleteCurrentBlog } = require("../repositories/blog.repository");
-//////////hellot
 
 const createNewBlog = async(req, res, next) => {
     try {
         const { title, blogContent, userId } = req.body;
+
+        const user = await findUserById(userId);
+        if(!user){
+            const error = new Error("Invalid userId.");
+            error.message = "Invalid userId.";
+            error.status = 400;
+            throw error;
+        }
 
         const newBlog = await createBlog({ title, blogContent, userId });
 
