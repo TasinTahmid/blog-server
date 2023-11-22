@@ -6,6 +6,7 @@ const createNewBlog = async(req, res, next) => {
         const { title, blogContent, userId } = req.body;
 
         const user = await findUserById(userId);
+        
         if(!user){
             const error = new Error("Invalid userId.");
             error.message = "Invalid userId.";
