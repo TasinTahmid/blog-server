@@ -1,5 +1,4 @@
 const Blog = require("../models/blog.model");
-const { findUserById } = require("../repositories/user.repository");
 const { createBlog, getBlogs, getBlogById, updateCurrentBlog, deleteCurrentBlog } = require("../repositories/blog.repository");
 
 const createNewBlog = async(req, res, next) => {
