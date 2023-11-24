@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const { findOneUser, createOneUser } = require('../repositories/user.repository');
-const createToken = require('../utils/create-token');
+const { createToken } = require('../utils/jwt');
 const { UserForRegistration, UserForLogin } = require("../dto/user.dto");
 
 const registrationService = async( body ) => {
@@ -22,7 +22,7 @@ const registrationService = async( body ) => {
 
         const newUser = await createOneUser(username, email, hashPassword);
 
-        return createToken(newUser.username);   
+        return createToken(newUser.id);   
     } catch (error) {   
         throw error;
     }
@@ -33,8 +33,6 @@ const loginService = async(body) => {
         const { email, password } = new UserForLogin(body);
 
         const user = await findOneUser(email);
-
-        console.log("user from login service:", typeof user)
 
         if(!user) {
             const error = new Error("User not found.");
@@ -51,7 +49,7 @@ const loginService = async(body) => {
             throw error;
         }
 
-        return createToken(user.username);
+        return createToken(user.id);
     } catch (error) {
         throw error;
     }

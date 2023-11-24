@@ -32,4 +32,22 @@ const createOneUser = async (username, email, hashPassword) => {
     
 }
 
-module.exports = { findOneUser, createOneUser, findUserById };
+const deleteUserById = async (user) => {
+    try {
+        return await user.destroy();
+        
+    } catch (error) {
+        throw error;
+    }
+}
+
+const updateUserById = async (user, password) => {
+    try {
+        return await user.update({ password });
+        
+    } catch (error) {
+        throw error;
+    }
+}
+
+module.exports = { findOneUser, createOneUser, findUserById, deleteUserById, updateUserById };
