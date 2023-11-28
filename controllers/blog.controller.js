@@ -5,9 +5,9 @@ module.exports.createBlog = async(req, res, next) => {
         const { title, blogContent } = req.body;
         const loggedInUserId = req.loggedInUserId;
 
-        const newBlog = await blogService.createBlog(title, blogContent, loggedInUserId);
+        await blogService.createBlog(title, blogContent, loggedInUserId);
 
-        return res.status(201).send(newBlog);
+        return res.status(201).send("Blog created successfully.");
 
     } catch (error) {
         return next(error);

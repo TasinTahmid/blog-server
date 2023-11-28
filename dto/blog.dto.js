@@ -1,8 +1,8 @@
 class CreateBlog {
-    constructor(title, blog, loggedInUserId){
+    constructor(title, blogContent, loggedInUserId){
         this.title = title;
-        this.blog = blog;
-        this.loggedInUserId = loggedInUserId;
+        this.blogContent = blogContent;
+        this.userId = loggedInUserId;
     }
 }
 

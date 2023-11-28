@@ -5,7 +5,8 @@ const blogDTO = require("../dto/blog.dto");
 module.exports.createBlog = async(title, blogContent, loggedInUserId) => {
     try {
         const blogData = new blogDTO.CreateBlog(title, blogContent, loggedInUserId);
-        const user = await userRepo.getUserById(blogData.loggedInUserId);
+
+        const user = await userRepo.getUserById(blogData.userId);
         
         if(!user){
             const error = new Error("User Id is not valid.");
