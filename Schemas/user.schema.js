@@ -11,4 +11,8 @@ const userLoginSchema = yup.object({
     password: yup.string().required(),
 });
 
-module.exports = { userRegistrationSchema, userLoginSchema };
+const userUpdateSchema = yup.object({
+    password: yup.string().min(4).required(),
+});
+
+module.exports = { userRegistrationSchema, userLoginSchema, userUpdateSchema };
