@@ -1,8 +1,8 @@
 const Blog = require("../models/blog.model");
 
-module.exports.createBlog = async (title, blogContent, userId) => {
+module.exports.createBlog = async (blogData) => {
     try {
-        const blog = await Blog.create({ title, blogContent, userId });
+        const blog = await Blog.create(blogData);
         return blog;
         
     } catch (error) {
@@ -28,9 +28,9 @@ module.exports.getBlogById = async (id) => {
     }
 }
 
-module.exports.updateBlogById = async (blog, title, blogContent) => {
+module.exports.updateBlogById = async (blog, blogData) => {
     try {
-        return await blog.update({ title, blogContent });
+        return await blog.update(blogData);
         
     } catch (error) {
         throw error;

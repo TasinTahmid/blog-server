@@ -1,19 +1,28 @@
-class UserForRegistration{
-    username;
-    email;
-    password;
-    constructor(body){
-        this.username = body.username;
-        this.email = body.email;
-        this.password = body.password;
+class Register{
+    constructor(username, email, password){
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 }
 
-class UserForLogin{
-    constructor(body){
-        this.email = body.email;
-        this.password = body.password;
+class Login{
+    constructor(email, password){
+        this.email = email;
+        this.password = password;
     }
 }
 
-module.exports = { UserForRegistration, UserForLogin };
+class UpdateUserById{
+    constructor(password){
+        this.password = password;
+    }
+}
+
+class DeleteUserById{
+    constructor(password){
+        this.password = password;
+    }
+}
+
+module.exports = { Register, Login, UpdateUserById, DeleteUserById };

@@ -43,9 +43,9 @@ module.exports.updateBlogById = async (req, res, next) => {
         const { title, blogContent } =  req.body;
         const loggedInUserId = req.loggedInUserId;
 
-        const updatedBlog = await blogService.updateBlogById(id, title, blogContent, loggedInUserId);
+        await blogService.updateBlogById(id, title, blogContent, loggedInUserId);
 
-        return res.status(200).send(updatedBlog);
+        return res.status(200).send("Blog updated successfully.");
         
     } catch (error) {
         return next(error);  
@@ -57,9 +57,9 @@ module.exports.deleteBlogById = async (req, res, next) => {
         const { id } = req.params;
         const loggedInUserId = req.loggedInUserId;
 
-        const deletedBlog = await blogService.deleteBlogById(id, loggedInUserId);
+        await blogService.deleteBlogById(id, loggedInUserId);
 
-        return res.status(200).send(deletedBlog);
+        return res.status(200).send("Blog deleted successfully.");
         
     } catch (error) {
         return next(error);  

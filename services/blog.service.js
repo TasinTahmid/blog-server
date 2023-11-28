@@ -1,9 +1,11 @@
 const userRepo = require("../repositories/user.repository");
 const blogRepo = require("../repositories/blog.repository");
+const blogDTO = require("../dto/blog.dto");
 
 module.exports.createBlog = async(title, blogContent, loggedInUserId) => {
     try {
-        const user = await userRepo.getUserById(loggedInUserId);
+        const blogData = new blogDTO.CreateBlog(title, blogContent, loggedInUserId);
+        const user = await userRepo.getUserById(blogData.loggedInUserId);
         
         if(!user){
             const error = new Error("User Id is not valid.");
@@ -12,7 +14,7 @@ module.exports.createBlog = async(title, blogContent, loggedInUserId) => {
             throw error;
         }
 
-        return await blogRepo.createBlog( title, blogContent, loggedInUserId );
+        return await blogRepo.createBlog(blogData);
     } catch (error) {
         throw error;
     }
@@ -36,7 +38,8 @@ module.exports.getBlogById = async (id) => {
             throw error;
         }
 
-        return blog;
+        const blogData = new blogDTO.GetBlogById(blog);
+        return blogData;
     } catch (error) {
         throw error;
     }
@@ -60,7 +63,8 @@ module.exports.updateBlogById = async(id, title, blogContent, loggedInUserId) =>
             throw error;
         }
 
-        return await blogRepo.updateBlogById(blog, title, blogContent);
+        const blogData = new blogDTO.UpdateBlogById(title, blogContent)
+        return await blogRepo.updateBlogById(blog, blogData);
     } catch (error) {
         throw error;
     }
@@ -68,7 +72,8 @@ module.exports.updateBlogById = async(id, title, blogContent, loggedInUserId) =>
 
 module.exports.deleteBlogById = async (id, loggedInUserId) => {
     try {
-        const blog = await blogRepo.getBlogById(id);
+        const blogData = new blogDTO.DeleteBlogById(id);
+        const blog = await blogRepo.getBlogById(blogData.id);
         if(!blog) {
             const error = new Error("Blog not found.");
             error.message = "Blogg not found.";

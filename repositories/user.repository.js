@@ -27,33 +27,28 @@ module.exports.getUserById = async (id) => {
     }
 }
 
-module.exports.createUser = async (username, email, hashPassword) => {
+module.exports.createUser = async (userData) => {
     try {
-        return await User.create({
-            username,
-            email,
-            password: hashPassword
-        });
+        return await User.create(userData);
 
     } catch (error) {
         throw error;           
-    }
-    
+    }   
 }
 
 module.exports.deleteUserById = async (user) => {
     try {
-        return await user.destroy();
-        
+        return await user.destroy();  
+
     } catch (error) {
         throw error;
     }
 }
 
-module.exports.updateUserById = async (user, password) => {
+module.exports.updateUserById = async (user, userData) => {
     try {
-        return await user.update({ password });
-        
+        return await user.update(userData);   
+         
     } catch (error) {
         throw error;
     }

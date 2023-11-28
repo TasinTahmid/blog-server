@@ -1,12 +1,10 @@
 const userRepo = require("../repositories/user.repository");
 const bcrypt = require("bcrypt");
 const { createToken } = require('../utils/jwt');
-const { UserForRegistration, UserForLogin } = require("../dto/user.dto");
+const userDTO = require("../dto/user.dto");
 
-module.exports.register = async( body ) => {
+module.exports.register = async( username, email, password ) => {
     try {
-        const { username, email, password } = new UserForRegistration(body);
-
         const userByUsername = await userRepo.getUserByUsername(username);
     
         if(userByUsername) {
@@ -28,7 +26,9 @@ module.exports.register = async( body ) => {
         const salt = await bcrypt.genSalt();
         const hashPassword = await bcrypt.hash(password, salt);
 
-        const newUser = await userRepo.createUser(username, email, hashPassword);
+        const userData = new userDTO.Register(username, email, hashPassword);
+
+        const newUser = await userRepo.createUser(userData);
 
         return createToken(newUser.id);   
     } catch (error) {   
@@ -36,11 +36,11 @@ module.exports.register = async( body ) => {
     }
 }
 
-module.exports.login = async(body) => {
+module.exports.login = async(email, password) => {
     try {
-        const { email, password } = new UserForLogin(body);
+        const userData = new userDTO.Login(email, password);
 
-        const user = await userRepo.getUserByEmail(email);
+        const user = await userRepo.getUserByEmail(userData.email);
 
         if(!user) {
             const error = new Error("User not found.");
@@ -49,7 +49,7 @@ module.exports.login = async(body) => {
             throw error;
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(userData.password, user.password);
         if(!isMatch) {
             const error = new Error("Invalid credentials");
             error.message = "Invalid credentials";
@@ -61,7 +61,7 @@ module.exports.login = async(body) => {
     } catch (error) {
         throw error;
     }
-};
+}
 
 module.exports.updateUserById = async (id, loggedInUserId, password) => {
     try {
@@ -83,11 +83,12 @@ module.exports.updateUserById = async (id, loggedInUserId, password) => {
         const salt = await bcrypt.genSalt();
         const hashPassword = await bcrypt.hash(password, salt);
 
-        return await userRepo.updateUserById(user, hashPassword);
+        const userData = new userDTO.UpdateUserById(hashPassword);
+
+        return await userRepo.updateUserById(user, userData);
     } catch (error) {
         throw error;
     }
-
 }
 
 module.exports.deleteUserById = async (id, loggedInUserId) => {

@@ -4,7 +4,9 @@ const bcrypt = require("bcrypt");
 
 module.exports.register = async(req, res, next) => {
     try {
-        const token = await userService.register(req.body); 
+        const { username, email, password } = req.body;
+
+        const token = await userService.register(username, email, password); 
 
         res.cookie("access-token", token, { maxAge: 3600*1000});
         return res.status(201).send("User registration successful.");
@@ -16,8 +18,9 @@ module.exports.register = async(req, res, next) => {
 
 module.exports.login = async(req, res, next) => {
     try {
-        console.log("req path:",req.method)/////////
-        const token = await userService.login(req.body);
+        const { email, password } = req.body;
+
+        const token = await userService.login(email, password);
 
         res.cookie("access-token", token, { maxAge: 3600*1000});
         return res.status(200).send("User logged in successfully.");
@@ -34,7 +37,6 @@ module.exports.updateUserById = async (req, res, next) => {
         const loggedInUserId = req.loggedInUserId;
         const { password } = req.body;
 
-        console.log("req path:",req.method)//////
         await userService.updateUserById(id, loggedInUserId, password);
 
         res.cookie("access-token", null, { maxAge: 0});
