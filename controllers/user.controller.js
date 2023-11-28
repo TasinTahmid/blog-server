@@ -16,6 +16,7 @@ module.exports.register = async(req, res, next) => {
 
 module.exports.login = async(req, res, next) => {
     try {
+        console.log("req path:",req.method)/////////
         const token = await userService.login(req.body);
 
         res.cookie("access-token", token, { maxAge: 3600*1000});
@@ -30,11 +31,13 @@ module.exports.login = async(req, res, next) => {
 module.exports.updateUserById = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const userId = req.userId;
+        const loggedInUserId = req.loggedInUserId;
         const { password } = req.body;
 
-        await userService.updateUserById(id, userId, password);
+        console.log("req path:",req.method)//////
+        await userService.updateUserById(id, loggedInUserId, password);
 
+        res.cookie("access-token", null, { maxAge: 0});
         return res.status(200).send("User updated successfully.");
         
     } catch (error) {
@@ -45,9 +48,9 @@ module.exports.updateUserById = async (req, res, next) => {
 module.exports.deleteUserById = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const userId = req.userId;
+        const loggedInUserId = req.loggedInUserId;
 
-        await userService.deleteUserById(id, userId);
+        await userService.deleteUserById(id, loggedInUserId);
 
         return res.status(200).send("User deleted successfully.");
         

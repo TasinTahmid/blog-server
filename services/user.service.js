@@ -63,7 +63,7 @@ module.exports.login = async(body) => {
     }
 };
 
-module.exports.updateUserById = async (id, userId, password) => {
+module.exports.updateUserById = async (id, loggedInUserId, password) => {
     try {
         const user = await userRepo.getUserById(id);
         if(!user) {
@@ -73,7 +73,7 @@ module.exports.updateUserById = async (id, userId, password) => {
             throw error;
         }
 
-        if(userId != user.id){
+        if(loggedInUserId != user.id){
             const error = new Error("User is not authorized.");
             error.message = "User is not authorized.";
             error.status = 403;
@@ -90,7 +90,7 @@ module.exports.updateUserById = async (id, userId, password) => {
 
 }
 
-module.exports.deleteUserById = async (id, userId) => {
+module.exports.deleteUserById = async (id, loggedInUserId) => {
     try {
         const user = await userRepo.getUserById(id);
         if(!user) {
@@ -100,7 +100,7 @@ module.exports.deleteUserById = async (id, userId) => {
             throw error;
         }
 
-        if(userId != user.id){
+        if(loggedInUserId != user.id){
             const error = new Error("User is not authorized.");
             error.message = "User is not authorized.";
             error.status = 403;

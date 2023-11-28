@@ -1,4 +1,3 @@
-
 const validateUser = (userSchema => async (req, res, next) => {
     try {
         if(req.path == '/register'){
@@ -7,6 +6,10 @@ const validateUser = (userSchema => async (req, res, next) => {
         else if(req.path == '/login'){
             await userSchema.userLoginSchema.validate(req.body);
         }
+        else if(req.method == 'PATCH'){
+            await userSchema.userUpdateSchema.validate(req.body);
+        }
+
         next();
         
     } catch (err) {

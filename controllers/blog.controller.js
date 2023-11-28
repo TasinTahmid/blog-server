@@ -3,9 +3,9 @@ const blogService = require("../services/blog.service");
 module.exports.createBlog = async(req, res, next) => {
     try {
         const { title, blogContent } = req.body;
-        const userId = req.userId;
+        const loggedInUserId = req.loggedInUserId;
 
-        const newBlog = await blogService.createBlog(title, blogContent, userId);
+        const newBlog = await blogService.createBlog(title, blogContent, loggedInUserId);
 
         return res.status(201).send(newBlog);
 
@@ -41,9 +41,9 @@ module.exports.updateBlogById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { title, blogContent } =  req.body;
-        const userId = req.userId;
+        const loggedInUserId = req.loggedInUserId;
 
-        const updatedBlog = await blogService.updateBlogById(id, title, blogContent, userId);
+        const updatedBlog = await blogService.updateBlogById(id, title, blogContent, loggedInUserId);
 
         return res.status(200).send(updatedBlog);
         
@@ -55,11 +55,10 @@ module.exports.updateBlogById = async (req, res, next) => {
 module.exports.deleteBlogById = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const userId = req.userId;
+        const loggedInUserId = req.loggedInUserId;
 
-        const deletedBlog = await blogService.deleteBlogById(id, userId);
+        const deletedBlog = await blogService.deleteBlogById(id, loggedInUserId);
 
-        console.log("blog deleted:", deletedBlog);
         return res.status(200).send(deletedBlog);
         
     } catch (error) {

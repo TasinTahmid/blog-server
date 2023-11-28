@@ -1,6 +1,6 @@
 const Blog = require("../models/blog.model");
 
-module.exports.createBlog = async ({ title, blogContent, userId }) => {
+module.exports.createBlog = async (title, blogContent, userId) => {
     try {
         const blog = await Blog.create({ title, blogContent, userId });
         return blog;

@@ -24,7 +24,7 @@ module.exports = async(req, res, next) => {
             throw error;
         }
     
-        req.userId = id;
+        req.loggedInUserId = id;
         
         next();
     } catch (error) {

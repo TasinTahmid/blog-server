@@ -1,9 +1,9 @@
 const userRepo = require("../repositories/user.repository");
 const blogRepo = require("../repositories/blog.repository");
 
-module.exports.createBlog = async(title, blogContent, userId) => {
+module.exports.createBlog = async(title, blogContent, loggedInUserId) => {
     try {
-        const user = await userRepo.getUserById(userId);
+        const user = await userRepo.getUserById(loggedInUserId);
         
         if(!user){
             const error = new Error("User Id is not valid.");
@@ -12,7 +12,7 @@ module.exports.createBlog = async(title, blogContent, userId) => {
             throw error;
         }
 
-        return await blogRepo.createBlog({ title, blogContent, userId });
+        return await blogRepo.createBlog( title, blogContent, loggedInUserId );
     } catch (error) {
         throw error;
     }
@@ -43,7 +43,7 @@ module.exports.getBlogById = async (id) => {
 
 }
 
-module.exports.updateBlogById = async(id, title, blogContent, userId) => {
+module.exports.updateBlogById = async(id, title, blogContent, loggedInUserId) => {
     try {
         const blog = await blogRepo.getBlogById(id);
         if(!blog) {
@@ -53,8 +53,7 @@ module.exports.updateBlogById = async(id, title, blogContent, userId) => {
             throw error;
         }
 
-        console.log(userId, blog.userId)
-        if(userId != blog.userId){
+        if(loggedInUserId != blog.userId){
             const error = new Error("User is not the owner of this blog.");
             error.message = "User is not the owner of this blog.";
             error.status = 403;
@@ -67,7 +66,7 @@ module.exports.updateBlogById = async(id, title, blogContent, userId) => {
     }
 }
 
-module.exports.deleteBlogById = async (id, userId) => {
+module.exports.deleteBlogById = async (id, loggedInUserId) => {
     try {
         const blog = await blogRepo.getBlogById(id);
         if(!blog) {
@@ -77,8 +76,7 @@ module.exports.deleteBlogById = async (id, userId) => {
             throw error;
         }
 
-        if(userId != blog.userId){
-            console.log("throwing");
+        if(loggedInUserId != blog.userId){
             const error = new Error("User is not the owner of this blog.");
             error.message = "User is not the owner of this blog.";
             error.status = 403;

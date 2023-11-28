@@ -7,7 +7,7 @@ const validateUser = require("../middlewares/user-validation.middleware");
 
 router.post('/register', validateUser(userSchema), controller.register);
 router.post('/login', validateUser(userSchema), controller.login);
-router.patch('/:id', authenticateUser, controller.updateUserById);
+router.patch('/:id', validateUser(userSchema), authenticateUser, controller.updateUserById);
 router.delete('/:id', authenticateUser, controller.deleteUserById);
 
 module.exports = router;
