@@ -16,6 +16,8 @@ module.exports.createBlog = async(req, res, next) => {
 
 module.exports.getAllBlogs = async (req, res, next) => {
     try {
+        console.log(res.type)
+        console.log(res.get('Content-Type'))
         const blogList = await blogService.getAllBlogs();
 
         return res.status(200).send(blogList);
