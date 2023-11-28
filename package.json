@@ -10,6 +10,7 @@
   "author": "Md Tasin Tahmid",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^8.54.0",
     "nodemon": "^3.0.1"
   },
   "dependencies": {
