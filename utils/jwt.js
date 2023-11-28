@@ -6,7 +6,6 @@ const createToken = (userId) => {
 
 const validateToken = (token) => {
     try {
-        console.log('nnnnnnnnnnnn',token)
         return jwt.verify(token, "secret-key");
         
     } catch (e) {

@@ -1,13 +1,14 @@
 const express = require("express");
-const { createNewBlog, getAllBlogs, getOneBlog, updateOneBlog, deleteOneBlog } = require("../controllers/blog.controller");
+const controller = require("../controllers/blog.controller");
 const authenticateUser = require("../middlewares/authenticate-user.middleware");
+
 const router = express.Router();
 
-router.post('/', authenticateUser, createNewBlog);
-router.get('/', getAllBlogs);
-router.get('/:id', getOneBlog);
-router.put('/:id', authenticateUser, updateOneBlog);
+router.post('/', authenticateUser, controller.createBlog);
+router.get('/', controller.getAllBlogs);
+router.get('/:id', controller.getBlogById);
+router.put('/:id', authenticateUser, controller.updateBlogById);
 // router.patch('/:id', updateOneBlogPartially);
-router.delete('/:id', authenticateUser, deleteOneBlog);
+router.delete('/:id', authenticateUser, controller.deleteBlogById);
 
 module.exports = router;

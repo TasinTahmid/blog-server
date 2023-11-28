@@ -1,7 +1,6 @@
-const { where } = require("sequelize");
 const Blog = require("../models/blog.model");
 
-const createBlog = async ({ title, blogContent, userId }) => {
+module.exports.createBlog = async ({ title, blogContent, userId }) => {
     try {
         const blog = await Blog.create({ title, blogContent, userId });
         return blog;
@@ -11,7 +10,7 @@ const createBlog = async ({ title, blogContent, userId }) => {
     }
 }
 
-const getBlogs = async () => {
+module.exports.getAllBlogs = async () => {
     try {
         return await Blog.findAll();
         
@@ -20,7 +19,7 @@ const getBlogs = async () => {
     }
 }
 
-const getBlogById = async (id) => {
+module.exports.getBlogById = async (id) => {
     try {
         return await Blog.findOne({ where: { id } });
         
@@ -29,16 +28,16 @@ const getBlogById = async (id) => {
     }
 }
 
-const updateCurrentBlog = async (blog, title, blogContent, userId) => {
+module.exports.updateBlogById = async (blog, title, blogContent) => {
     try {
-        return await blog.update({ title, blogContent, userId });
+        return await blog.update({ title, blogContent });
         
     } catch (error) {
         throw error;
     }
 
 }
-const deleteCurrentBlog = async (blog) => {
+module.exports.deleteBlogById = async (blog) => {
     try {
         return await blog.destroy();
         
@@ -47,4 +46,3 @@ const deleteCurrentBlog = async (blog) => {
     }
 }
 
-module.exports = { createBlog, getBlogs, getBlogById, updateCurrentBlog, deleteCurrentBlog };

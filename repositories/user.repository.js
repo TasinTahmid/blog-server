@@ -1,6 +1,15 @@
 const User = require("../models/user.model");
 
-const findOneUser = async (email) => {
+module.exports.getUserByUsername = async (username) => {
+    try {
+        return await User.findOne({ where: { username } });
+
+    } catch (error) {        
+        throw error;   
+    }
+}
+
+module.exports.getUserByEmail = async (email) => {
     try {
         return await User.findOne({ where: { email } });
 
@@ -9,7 +18,7 @@ const findOneUser = async (email) => {
     }
 }
 
-const findUserById = async (id) => {
+module.exports.getUserById = async (id) => {
     try {
         return await User.findOne({ where: { id } });
 
@@ -18,7 +27,7 @@ const findUserById = async (id) => {
     }
 }
 
-const createOneUser = async (username, email, hashPassword) => {
+module.exports.createUser = async (username, email, hashPassword) => {
     try {
         return await User.create({
             username,
@@ -32,7 +41,7 @@ const createOneUser = async (username, email, hashPassword) => {
     
 }
 
-const deleteUserById = async (user) => {
+module.exports.deleteUserById = async (user) => {
     try {
         return await user.destroy();
         
@@ -41,7 +50,7 @@ const deleteUserById = async (user) => {
     }
 }
 
-const updateUserById = async (user, password) => {
+module.exports.updateUserById = async (user, password) => {
     try {
         return await user.update({ password });
         
@@ -49,5 +58,3 @@ const updateUserById = async (user, password) => {
         throw error;
     }
 }
-
-module.exports = { findOneUser, createOneUser, findUserById, deleteUserById, updateUserById };

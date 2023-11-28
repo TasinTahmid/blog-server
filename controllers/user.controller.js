@@ -1,72 +1,57 @@
 const userRepo = require("../repositories/user.repository");
+const userService = require("../services/user.service");
 const bcrypt = require("bcrypt");
 
+module.exports.register = async(req, res, next) => {
+    try {
+        const token = await userService.register(req.body); 
 
-const updateUserById = async (req, res, next) => {
+        res.cookie("access-token", token, { maxAge: 3600*1000});
+        return res.status(201).send("User registration successful.");
+
+    } catch (error) {
+        return next(error);
+    }
+};
+
+module.exports.login = async(req, res, next) => {
+    try {
+        const token = await userService.login(req.body);
+
+        res.cookie("access-token", token, { maxAge: 3600*1000});
+        return res.status(200).send("User logged in successfully.");
+
+    } catch (error) {
+        return next(error);  
+    }
+};
+
+
+module.exports.updateUserById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const userId = req.userId;
         const { password } = req.body;
 
-        const user = await userRepo.findUserById(id);
-        console.log("serasuser",user)
-        if(!user) {
-            const error = new Error("User not found.");
-            error.message = "User not found.";
-            error.status = 404;
-            throw error;
-        }
+        await userService.updateUserById(id, userId, password);
 
-        console.log(userId, user.id)
-        if(userId != user.id){
-            const error = new Error("User is not authorized.");
-            error.message = "User is not authorized.";
-            error.status = 403;
-            throw error;
-        }
-
-        const salt = await bcrypt.genSalt();
-        const hashPassword = await bcrypt.hash(password, salt);
-
-        const updatedUser = await userRepo.updateUserById(user, hashPassword);
-
-        return res.status(200).send(updatedUser);
+        return res.status(200).send("User updated successfully.");
         
     } catch (error) {
         return next(error);  
     }
 }
 
-const deleteUserById = async (req, res, next) => {
+module.exports.deleteUserById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const userId = req.userId;
 
+        await userService.deleteUserById(id, userId);
 
-        const user = await userRepo.findUserById(id);
-        console.log("serasuser",user)
-        if(!user) {
-            const error = new Error("User not found.");
-            error.message = "User not found.";
-            error.status = 404;
-            throw error;
-        }
-
-        console.log(userId, user.id)
-        if(userId != user.id){
-            const error = new Error("User is not authorized.");
-            error.message = "User is not authorized.";
-            error.status = 403;
-            throw error;
-        }
-
-        const deletedUser = await userRepo.deleteUserById(user);
-
-        return res.status(200).send(deletedUser);
+        return res.status(200).send("User deleted successfully.");
         
     } catch (error) {
         return next(error);  
     }
 }
-
-module.exports = { updateUserById, deleteUserById };

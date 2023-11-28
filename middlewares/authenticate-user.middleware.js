@@ -7,7 +7,6 @@ module.exports = async(req, res, next) => {
     try {
         const token = req.cookies['access-token'];
     
-
         if(!token) {
             const error = new Error("Authentication needed.");
             error.message = "Authentication needed.";
@@ -17,7 +16,7 @@ module.exports = async(req, res, next) => {
     
         const { id } = validateToken(token);
 
-        const user = await userRepo.findUserById(id);
+        const user = await userRepo.getUserById(id);
         if(!user) {
             const error = new Error("Authentication needed.");
             error.message = "Authentication needed.";

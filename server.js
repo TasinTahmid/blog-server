@@ -14,7 +14,6 @@ app.use('/api/v1/', v1Routes);
 app.use('*', wrongRouteHandler);
 
 app.use(erroHandler);
-////
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
