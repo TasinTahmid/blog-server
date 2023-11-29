@@ -1,6 +1,7 @@
 const userRepo = require("../repositories/user.repository");
 const blogRepo = require("../repositories/blog.repository");
 const blogDTO = require("../dto/blog.dto");
+const formatData = require("../utils/formatData");
 
 module.exports.createBlog = async(title, blogContent, loggedInUserId) => {
     try {
@@ -21,17 +22,24 @@ module.exports.createBlog = async(title, blogContent, loggedInUserId) => {
     }
 }
 
-module.exports.getAllBlogs = async() => {
+module.exports.getAllBlogs = async(contentType) => {
     try {
-        return await blogRepo.getAllBlogs();
+        console.log("type",contentType)
+        const blogResponse = await blogRepo.getAllBlogs();
+        const sequelizeBlogList = blogResponse.map(e => e.dataValues);
+        const blogList = new blogDTO.GetAllBlogs(sequelizeBlogList);
+
+        return formatData(contentType, blogList);
     } catch (error) {
         throw error;
     }
 }
 
-module.exports.getBlogById = async (id) => {
+module.exports.getBlogById = async (id, contentType) => {
     try {
+        
         const blog = await blogRepo.getBlogById(id);
+        console.log("blog type",typeof blog)
         if(!blog) {
             const error = new Error("Blog not found.");
             error.message = "Blog not found.";
@@ -40,7 +48,10 @@ module.exports.getBlogById = async (id) => {
         }
 
         const blogData = new blogDTO.GetBlogById(blog);
-        return blogData;
+
+        const formattedBlogData = formatData(contentType, blogData);
+
+        return formattedBlogData;
     } catch (error) {
         throw error;
     }

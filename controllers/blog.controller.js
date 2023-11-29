@@ -16,9 +16,9 @@ module.exports.createBlog = async(req, res, next) => {
 
 module.exports.getAllBlogs = async (req, res, next) => {
     try {
-        console.log(res.type)
-        console.log(res.get('Content-Type'))
-        const blogList = await blogService.getAllBlogs();
+        const contentType = res.get('Content-Type');
+
+        const blogList = await blogService.getAllBlogs(contentType);
 
         return res.status(200).send(blogList);
         
@@ -31,7 +31,9 @@ module.exports.getBlogById = async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        const blog = await blogService.getBlogById(id);
+        const contentType = res.get('Content-Type');
+
+        const blog = await blogService.getBlogById(id, contentType);
 
         return res.status(200).send(blog);
     } catch (error) {

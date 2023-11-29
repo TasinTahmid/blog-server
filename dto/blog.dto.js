@@ -6,6 +6,19 @@ class CreateBlog {
     }
 }
 
+class GetAllBlogs{
+    constructor(blogList){
+        this.blogList = blogList.map(blog => {
+            const obj = {};
+            obj.id= blog.id;
+            obj.title= blog.title;
+            obj.blogContent= blog.blogContent;
+            obj.userId= blog.userId;
+            return obj;
+        })
+    }
+}
+
 class GetBlogById {
     constructor(blog){
         this.id = blog.id;
@@ -28,4 +41,4 @@ class DeleteBlogById {
     }
 }
 
-module.exports = { CreateBlog, GetBlogById, UpdateBlogById, DeleteBlogById };
+module.exports = { CreateBlog, GetAllBlogs, GetBlogById, UpdateBlogById, DeleteBlogById };
