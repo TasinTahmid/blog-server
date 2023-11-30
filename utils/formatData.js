@@ -48,7 +48,24 @@ const changeFormat = {
         return html;
     },
 
-    "text/plain": data => data.blogList ? JSON.stringify(data.blogList) : JSON.stringify(data) 
+    "text/plain": data => {
+        let text = ``;
+        if(data.blogList) {
+            data.blogList.map((blog, idx) => {
+                text += `blog ${idx}\n`
+                for(let key in blog){
+                    text +=`\t${key}: ${blog[key]}\n`;
+                }
+                text +=`\n`;
+            });
+            return text;
+        } 
+        
+        for(let key in data){
+            text +=`\t${key}: ${data[key]}\n`;
+        }
+        return text;
+    }
 };
 
 const formatData = (contentType, data) => {

@@ -35,9 +35,9 @@ module.exports.updateUserById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const loggedInUserId = req.loggedInUserId;
-        const { password } = req.body;
+        const { oldPassword, newPassword } = req.body;
 
-        await userService.updateUserById(id, loggedInUserId, password);
+        await userService.updateUserById(id, loggedInUserId, oldPassword, newPassword);
 
         res.cookie("access-token", null, { maxAge: 0});
         return res.status(200).send("User updated successfully.");

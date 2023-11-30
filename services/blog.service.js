@@ -22,10 +22,10 @@ module.exports.createBlog = async(title, blogContent, loggedInUserId) => {
     }
 }
 
-module.exports.getAllBlogs = async(contentType) => {
+module.exports.getAllBlogs = async(contentType, page, size) => {
     try {
         console.log("type",contentType)
-        const blogResponse = await blogRepo.getAllBlogs();
+        const blogResponse = await blogRepo.getAllBlogs(page, size);
         const sequelizeBlogList = blogResponse.map(e => e.dataValues);
         const blogList = new blogDTO.GetAllBlogs(sequelizeBlogList);
 

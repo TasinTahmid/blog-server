@@ -12,7 +12,8 @@ const userLoginSchema = yup.object({
 });
 
 const userUpdateSchema = yup.object({
-    password: yup.string().min(4).required(),
+    oldPassword: yup.string().required(),
+    newPassword: yup.string().min(4).required(),
 });
 
 module.exports = { userRegistrationSchema, userLoginSchema, userUpdateSchema };

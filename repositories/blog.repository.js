@@ -10,9 +10,16 @@ module.exports.createBlog = async (blogData) => {
     }
 }
 
-module.exports.getAllBlogs = async () => {
+module.exports.getAllBlogs = async (page, size) => {
     try {
-        return await Blog.findAll();
+        const limit = size;
+        const offset = (page - 1) * size;
+        console.log("limit:", limit,"offset:",  offset)
+
+        return await Blog.findAll({
+            limit,
+            offset
+        });
         
     } catch (error) {
         throw error;

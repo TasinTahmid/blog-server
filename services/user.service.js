@@ -63,13 +63,20 @@ module.exports.login = async(email, password) => {
     }
 }
 
-module.exports.updateUserById = async (id, loggedInUserId, password) => {
+module.exports.updateUserById = async (id, loggedInUserId, oldPassword, newPassword) => {
     try {
         const user = await userRepo.getUserById(id);
         if(!user) {
             const error = new Error("User not found.");
             error.message = "User not found.";
             error.status = 404;
+            throw error;
+        }
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if(!isMatch) {
+            const error = new Error("Invalid credentials");
+            error.message = "Invalid credentials";
+            error.status = 400;
             throw error;
         }
 
@@ -81,7 +88,7 @@ module.exports.updateUserById = async (id, loggedInUserId, password) => {
         }
 
         const salt = await bcrypt.genSalt();
-        const hashPassword = await bcrypt.hash(password, salt);
+        const hashPassword = await bcrypt.hash(newPassword, salt);
 
         const userData = new userDTO.UpdateUserById(hashPassword);
 
