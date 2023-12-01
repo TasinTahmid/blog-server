@@ -1,6 +1,4 @@
-const userRepo = require("../repositories/user.repository");
 const userService = require("../services/user.service");
-const bcrypt = require("bcrypt");
 
 module.exports.register = async(req, res, next) => {
     try {
@@ -45,7 +43,7 @@ module.exports.updateUserById = async (req, res, next) => {
     } catch (error) {
         return next(error);  
     }
-}
+};
 
 module.exports.deleteUserById = async (req, res, next) => {
     try {
@@ -59,4 +57,4 @@ module.exports.deleteUserById = async (req, res, next) => {
     } catch (error) {
         return next(error);  
     }
-}
+};

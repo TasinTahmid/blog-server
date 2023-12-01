@@ -15,7 +15,7 @@ class GetAllBlogs{
             obj.blogContent= blog.blogContent;
             obj.userId= blog.userId;
             return obj;
-        })
+        });
     }
 }
 

@@ -1,55 +1,29 @@
 const Blog = require("../models/blog.model");
 
 module.exports.createBlog = async (blogData) => {
-    try {
-        const blog = await Blog.create(blogData);
-        return blog;
-        
-    } catch (error) {
-        throw error;
-    }
-}
+    const blog = await Blog.create(blogData);
+    return blog;
+};
 
-module.exports.getAllBlogs = async (page, size) => {
-    try {
-        const limit = size;
-        const offset = (page - 1) * size;
-        console.log("limit:", limit,"offset:",  offset)
-
-        return await Blog.findAll({
-            limit,
-            offset
-        });
-        
-    } catch (error) {
-        throw error;
-    }
-}
+module.exports.getAllBlogs = async (limit, offset) => {
+    console.log("limit:", limit, "offset:", offset);
+    return await Blog.findAll({
+        limit,
+        offset,
+    });
+};
 
 module.exports.getBlogById = async (id) => {
-    try {
-        return await Blog.findOne({ where: { id } });
-        
-    } catch (error) {
-        throw error;
-    }
-}
+    return await Blog.findOne({ where: { id } });
+};
 
 module.exports.updateBlogById = async (blog, blogData) => {
-    try {
-        return await blog.update(blogData);
-        
-    } catch (error) {
-        throw error;
-    }
-
-}
+    return await blog.update(blogData);
+};
 module.exports.deleteBlogById = async (blog) => {
-    try {
-        return await blog.destroy();
-        
-    } catch (error) {
-        throw error;
-    }
-}
+    return await blog.destroy();
+};
 
+module.exports.countNumberOfBlogs = async () => {
+    return await Blog.count();
+};

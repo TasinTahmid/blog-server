@@ -1,12 +1,14 @@
 const Sequelize = require("sequelize");
 
 const sequelize = new Sequelize(
-    process.env.DATABASE_NAME, 
-    process.env.SERVER_NAME, 
-    process.env.DB_PASSWORD, {
-    dialect: "mysql",
-    host: "localhost",
-});
+    process.env.DATABASE_NAME,
+    process.env.SERVER_NAME,
+    process.env.DB_PASSWORD,
+    {
+        dialect: "mysql",
+        host: "localhost",
+    }
+);
 
 sequelize
     .sync({ force: false })
@@ -15,7 +17,7 @@ sequelize
     })
     .catch((e) => {
         console.log("not conneted");
-        console.log('from db.js',e)
+        console.log("from db.js", e);
     });
 
 module.exports = sequelize;

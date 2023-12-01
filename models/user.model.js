@@ -3,27 +3,27 @@ const sequelize = require("../utils/database");
 const Blog = require("../models/blog.model");
 
 const User = sequelize.define("User", {
-    id:{
+    id: {
         type: Datatypes.UUID,
         defaultValue: Datatypes.UUIDV4,
         allowNull: false,
         primaryKey: true,
     },
-    username:{
+    username: {
         type: Datatypes.STRING,
         allowNull: false,
     },
-    email:{
+    email: {
         type: Datatypes.STRING,
         allowNull: false,
     },
-    password:{
+    password: {
         type: Datatypes.STRING,
         allowNull: false,
     },
 });
 
-User.hasMany(Blog, { foreignKey: 'userId' });
-Blog.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Blog, { foreignKey: "userId" });
+Blog.belongsTo(User, { foreignKey: "userId" });
 
 module.exports = User;

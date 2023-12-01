@@ -5,7 +5,7 @@ const userRepo = require("../repositories/user.repository");
 
 module.exports = async(req, res, next) => {
     try {
-        const token = req.cookies['access-token'];
+        const token = req.cookies["access-token"];
     
         if(!token) {
             const error = new Error("Authentication needed.");
@@ -30,4 +30,4 @@ module.exports = async(req, res, next) => {
     } catch (error) {
         return next(error);
     }
-}
+};

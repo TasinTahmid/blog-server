@@ -1,4 +1,5 @@
 const blogService = require("../services/blog.service");
+const calcLimitAndOffset = require("../utils/calculateLimitAndOffset");
 
 module.exports.createBlog = async(req, res, next) => {
     try {
@@ -16,23 +17,24 @@ module.exports.createBlog = async(req, res, next) => {
 
 module.exports.getAllBlogs = async (req, res, next) => {
     try {
-        const contentType = res.get('Content-Type');
+        const contentType = res.get("Content-Type");
         const { page, size } = req.query;
+        const { limit, offset } = await calcLimitAndOffset(Number(page), Number(size));
 
-        const blogList = await blogService.getAllBlogs(contentType, Number(page), Number(size));
+        const blogList = await blogService.getAllBlogs(contentType, limit, offset);
 
         return res.status(200).send(blogList);
         
     } catch (error) {
         return next(error);  
     }
-}
+};
 
 module.exports.getBlogById = async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        const contentType = res.get('Content-Type');
+        const contentType = res.get("Content-Type");
 
         const blog = await blogService.getBlogById(id, contentType);
 
@@ -40,7 +42,7 @@ module.exports.getBlogById = async (req, res, next) => {
     } catch (error) {
         return next(error);  
     }
-}
+};
 
 module.exports.updateBlogById = async (req, res, next) => {
     try {
@@ -55,7 +57,7 @@ module.exports.updateBlogById = async (req, res, next) => {
     } catch (error) {
         return next(error);  
     }
-}
+};
 
 module.exports.deleteBlogById = async (req, res, next) => {
     try {
@@ -69,4 +71,4 @@ module.exports.deleteBlogById = async (req, res, next) => {
     } catch (error) {
         return next(error);  
     }
-}
+};
