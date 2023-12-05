@@ -10,14 +10,14 @@ const sequelize = new Sequelize(
     }
 );
 
-sequelize
-    .sync({ force: false })
-    .then(() => {
-        console.log("connected successfully");
-    })
-    .catch((e) => {
-        console.log("not conneted");
-        console.log("from db.js", e);
-    });
+// sequelize
+//     .sync({ force: false })
+//     .then(() => {
+//         console.log("connected successfully");
+//     })
+//     .catch((e) => {
+//         console.log("not conneted");
+//         console.log("from db.js", e);
+//     });
 
 module.exports = sequelize;

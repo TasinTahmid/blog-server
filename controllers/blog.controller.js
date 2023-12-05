@@ -1,7 +1,7 @@
 const blogService = require("../services/blog.service");
 const calcLimitAndOffset = require("../utils/calculateLimitAndOffset");
 
-module.exports.createBlog = async(req, res, next) => {
+module.exports.createBlog = async (req, res, next) => {
     try {
         const { title, blogContent } = req.body;
         const loggedInUserId = req.loggedInUserId;
@@ -9,24 +9,26 @@ module.exports.createBlog = async(req, res, next) => {
         await blogService.createBlog(title, blogContent, loggedInUserId);
 
         return res.status(201).send("Blog created successfully.");
-
     } catch (error) {
         return next(error);
     }
 };
 
 module.exports.getAllBlogs = async (req, res, next) => {
+    console.log("innnnnnn", req);
     try {
         const contentType = res.get("Content-Type");
         const { page, size } = req.query;
         const { limit, offset } = await calcLimitAndOffset(Number(page), Number(size));
+        console.log("innnnnn222n", res.get("xxxxxxxxxx"));
 
+        console.log("limit, off", limit, offset);
         const blogList = await blogService.getAllBlogs(contentType, limit, offset);
 
-        return res.status(200).send(blogList);
-        
+        res.status(200);
+        res.send(blogList);
     } catch (error) {
-        return next(error);  
+        return next(error);
     }
 };
 
@@ -40,22 +42,21 @@ module.exports.getBlogById = async (req, res, next) => {
 
         return res.status(200).send(blog);
     } catch (error) {
-        return next(error);  
+        return next(error);
     }
 };
 
 module.exports.updateBlogById = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { title, blogContent } =  req.body;
+        const { title, blogContent } = req.body;
         const loggedInUserId = req.loggedInUserId;
 
         await blogService.updateBlogById(id, title, blogContent, loggedInUserId);
 
         return res.status(200).send("Blog updated successfully.");
-        
     } catch (error) {
-        return next(error);  
+        return next(error);
     }
 };
 
@@ -67,8 +68,7 @@ module.exports.deleteBlogById = async (req, res, next) => {
         await blogService.deleteBlogById(id, loggedInUserId);
 
         return res.status(200).send("Blog deleted successfully.");
-        
     } catch (error) {
-        return next(error);  
+        return next(error);
     }
 };
