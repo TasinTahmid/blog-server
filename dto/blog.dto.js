@@ -1,26 +1,27 @@
 class CreateBlog {
-    constructor(title, blogContent, loggedInUserId){
+    constructor(title, blogContent, loggedInUserId) {
         this.title = title;
         this.blogContent = blogContent;
         this.userId = loggedInUserId;
     }
 }
 
-class GetAllBlogs{
-    constructor(blogList){
-        this.blogList = blogList.map(blog => {
+class GetAllBlogs {
+    constructor(blogList) {
+        this.blogList = blogList.map((blog) => {
             const obj = {};
-            obj.id= blog.id;
-            obj.title= blog.title;
-            obj.blogContent= blog.blogContent;
-            obj.userId= blog.userId;
+            obj.id = blog.id;
+            obj.title = blog.title;
+            obj.blogContent = blog.blogContent;
+            obj.userId = blog.userId;
             return obj;
         });
     }
 }
 
 class GetBlogById {
-    constructor(blog){
+    constructor(blog) {
+        console.log("in dto");
         this.id = blog.id;
         this.title = blog.title;
         this.blogContent = blog.blogContent;
@@ -29,14 +30,14 @@ class GetBlogById {
 }
 
 class UpdateBlogById {
-    constructor(title, blogContent){
+    constructor(title, blogContent) {
         this.title = title;
         this.blogContent = blogContent;
     }
 }
 
 class DeleteBlogById {
-    constructor(id){
+    constructor(id) {
         this.id = id;
     }
 }

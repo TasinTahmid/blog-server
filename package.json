@@ -5,13 +5,14 @@
   "main": "server.js",
   "scripts": {
     "lint": "npx eslint .",
-    "test": "jest --watchAll",
+    "test": "jest --watchAll --verbose",
     "start": "nodemon server"
   },
   "author": "Md Tasin Tahmid",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^8.54.0",
+    "jest": "^29.7.0",
     "nodemon": "^3.0.1"
   },
   "dependencies": {

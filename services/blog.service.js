@@ -6,29 +6,20 @@ const formatData = require("../utils/formatData");
 module.exports.createBlog = async (title, blogContent, loggedInUserId) => {
     const blogData = new blogDTO.CreateBlog(title, blogContent, loggedInUserId);
 
-    const user = await userRepo.getUserById(blogData.userId);
-
-    if (!user) {
-        const error = new Error("User Id is not valid.");
-        error.message = "User Id is not valid.";
-        error.status = 400;
-        throw error;
-    }
-
     return await blogRepo.createBlog(blogData);
 };
 
 module.exports.getAllBlogs = async (contentType, limit, offset) => {
-    const blogResponse = await blogRepo.getAllBlogs(limit, offset);
-    const sequelizeBlogList = blogResponse.map((e) => e.dataValues);
-    const blogList = new blogDTO.GetAllBlogs(sequelizeBlogList);
+    const sequelizeBlogList = await blogRepo.getAllBlogs(limit, offset);
+    const blogResponse = sequelizeBlogList.map((e) => e.dataValues);
+    const blogList = new blogDTO.GetAllBlogs(blogResponse);
 
     return formatData(contentType, blogList);
 };
 
 module.exports.getBlogById = async (id, contentType) => {
     const blog = await blogRepo.getBlogById(id);
-    console.log("blog type", typeof blog);
+
     if (!blog) {
         const error = new Error("Blog not found.");
         error.message = "Blog not found.";
@@ -53,8 +44,8 @@ module.exports.updateBlogById = async (id, title, blogContent, loggedInUserId) =
     }
 
     if (loggedInUserId != blog.userId) {
-        const error = new Error("User is not the owner of this blog.");
-        error.message = "User is not the owner of this blog.";
+        const error = new Error("User is not authoroized to updated this blog.");
+        error.message = "User is not authoroized to updated this blog.";
         error.status = 403;
         throw error;
     }
@@ -64,18 +55,17 @@ module.exports.updateBlogById = async (id, title, blogContent, loggedInUserId) =
 };
 
 module.exports.deleteBlogById = async (id, loggedInUserId) => {
-    const blogData = new blogDTO.DeleteBlogById(id);
-    const blog = await blogRepo.getBlogById(blogData.id);
+    const blog = await blogRepo.getBlogById(id);
     if (!blog) {
         const error = new Error("Blog not found.");
-        error.message = "Blogg not found.";
+        error.message = "Blog not found.";
         error.status = 404;
         throw error;
     }
 
     if (loggedInUserId != blog.userId) {
-        const error = new Error("User is not the owner of this blog.");
-        error.message = "User is not the owner of this blog.";
+        const error = new Error("User is not authoroized to delete this blog.");
+        error.message = "User is not authoroized to delete this blog.";
         error.status = 403;
         throw error;
     }

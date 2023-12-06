@@ -15,18 +15,14 @@ module.exports.createBlog = async (req, res, next) => {
 };
 
 module.exports.getAllBlogs = async (req, res, next) => {
-    console.log("innnnnnn", req);
     try {
         const contentType = res.get("Content-Type");
         const { page, size } = req.query;
         const { limit, offset } = await calcLimitAndOffset(Number(page), Number(size));
-        console.log("innnnnn222n", res.get("xxxxxxxxxx"));
 
-        console.log("limit, off", limit, offset);
         const blogList = await blogService.getAllBlogs(contentType, limit, offset);
 
-        res.status(200);
-        res.send(blogList);
+        return res.status(200).send(blogList);
     } catch (error) {
         return next(error);
     }

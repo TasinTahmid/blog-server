@@ -3,8 +3,10 @@ module.exports = {
         browser: true,
         commonjs: true,
         es2021: true,
+        node: true,
     },
-    // extends: "eslint:recommended",
+    ignorePatterns: ["**/*.test.js"],
+    extends: ["eslint:recommended", "prettier"],
     overrides: [
         {
             env: {
@@ -19,8 +21,5 @@ module.exports = {
     parserOptions: {
         ecmaVersion: "latest",
     },
-    rules: {
-        semi: ["error", "always"],
-        quotes: ["error", "double"],
-    },
+    rules: {},
 };

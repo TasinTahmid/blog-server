@@ -1,4 +1,4 @@
-module.exports = (err, req, res) => {
+module.exports = (err, req, res, next) => {
     console.log("error from global handler", err);
 
     const errStatus = err.status || 500;
