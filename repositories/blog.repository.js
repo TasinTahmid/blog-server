@@ -1,12 +1,10 @@
 const Blog = require("../models/blog.model");
 
 module.exports.createBlog = async (blogData) => {
-    const blog = await Blog.create(blogData);
-    return blog;
+    return await Blog.create(blogData);
 };
 
 module.exports.getAllBlogs = async (limit, offset) => {
-    console.log("limit:", limit, "offset:", offset);
     return await Blog.findAll({
         limit,
         offset,
