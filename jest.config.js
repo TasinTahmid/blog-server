@@ -90,7 +90,7 @@ const config = {
     // moduleNameMapper: {},
 
     // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
-    // modulePathIgnorePatterns: [],
+    modulePathIgnorePatterns: ["utils"],
 
     // Activates notifications for test results
     // notify: false,
@@ -155,9 +155,7 @@ const config = {
     testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[tj]s?(x)"],
 
     // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-    // testPathIgnorePatterns: [
-    //   "\\\\node_modules\\\\"
-    // ],
+    testPathIgnorePatterns: ["<rootDir>/utils/jwt.js"],
 
     // The regexp pattern or array of patterns that Jest uses to detect test files
     // testRegex: [],

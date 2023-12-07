@@ -16,10 +16,10 @@ module.exports.createUser = async (userData) => {
     return await User.create(userData);
 };
 
-module.exports.deleteUserById = async (user) => {
-    return await user.destroy();
-};
-
 module.exports.updateUserById = async (user, userData) => {
     return await user.update(userData);
+};
+
+module.exports.deleteUserById = async (user) => {
+    return await user.destroy();
 };

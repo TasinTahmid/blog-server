@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "npx eslint .",
     "test": "jest --watchAll --verbose",
-    "start": "nodemon server"
+    "dev": "nodemon server",
+    "start": "node server.js"
   },
   "author": "Md Tasin Tahmid",
   "license": "ISC",
