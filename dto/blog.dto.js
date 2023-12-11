@@ -1,5 +1,6 @@
 class CreateBlog {
     constructor(title, blogContent, loggedInUserId) {
+        // console.log("inside dto");
         this.title = title;
         this.blogContent = blogContent;
         this.userId = loggedInUserId;
@@ -36,10 +37,4 @@ class UpdateBlogById {
     }
 }
 
-class DeleteBlogById {
-    constructor(id) {
-        this.id = id;
-    }
-}
-
-module.exports = { CreateBlog, GetAllBlogs, GetBlogById, UpdateBlogById, DeleteBlogById };
+module.exports = { CreateBlog, GetAllBlogs, GetBlogById, UpdateBlogById };

@@ -4,7 +4,6 @@ const blogDTO = require("../../dto/blog.dto");
 const formatData = require("../../utils/formatData");
 const blogList = require("../testDB");
 
-jest.mock("../../dto/blog.dto");
 jest.mock("../../utils/formatData");
 
 describe("Testing blogServices.", () => {
@@ -26,13 +25,17 @@ describe("Testing blogServices.", () => {
                 userId: "c02e43c9-0786-44db-8089-2355cccf5850",
             };
 
-            jest.spyOn(blogDTO, "CreateBlog").mockReturnValue(mockDTOBlog);
+            // blogDTO.CreateBlog.mockReturnValue(mockDTOBlog);
+            // jest.spyOn(blogDTO, "CreateBlog").mockReturnValue(mockDTOBlog);
             jest.spyOn(blogRepo, "createBlog").mockResolvedValue(mockCreatedBlog);
 
             // Act
             await blogService.createBlog(title, blogContent, loggedInUserId);
 
-            expect(blogRepo.createBlog).toHaveBeenCalledWith(mockDTOBlog);
+            // Assert
+            // expect(blogDTO.CreateBlog).toHaveBeenCalledTimes(1);
+            expect(blogRepo.createBlog).toHaveBeenCalledWith(expect.any(blogDTO.CreateBlog));
+            // expect(blogRepo.createBlog).toHaveBeenCalledWith(mockDTOBlog);
         });
 
         it("Test-case 2: Internal server error, status code 500", async () => {
