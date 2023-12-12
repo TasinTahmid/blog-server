@@ -1,9 +1,8 @@
-class CreateBlog {
-    constructor(title, blogContent, loggedInUserId) {
-        // console.log("inside dto");
-        this.title = title;
-        this.blogContent = blogContent;
-        this.userId = loggedInUserId;
+class BlogDataToCreate {
+    constructor(blog) {
+        this.title = blog.title;
+        this.blogContent = blog.blogContent;
+        this.userId = blog.loggedInUserId;
     }
 }
 
@@ -20,9 +19,8 @@ class GetAllBlogs {
     }
 }
 
-class GetBlogById {
+class BlogData {
     constructor(blog) {
-        console.log("in dto");
         this.id = blog.id;
         this.title = blog.title;
         this.blogContent = blog.blogContent;
@@ -30,11 +28,12 @@ class GetBlogById {
     }
 }
 
-class UpdateBlogById {
-    constructor(title, blogContent) {
+class BlogDataForUpdate {
+    constructor(title, blogContent, userId) {
         this.title = title;
         this.blogContent = blogContent;
+        this.userId = userId;
     }
 }
 
-module.exports = { CreateBlog, GetAllBlogs, GetBlogById, UpdateBlogById };
+module.exports = { BlogDataToCreate, GetAllBlogs, BlogData, BlogDataForUpdate };

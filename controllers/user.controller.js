@@ -1,13 +1,16 @@
 const userService = require("../services/user.service");
+const userDTO = require("../dto/user.dto");
 
 module.exports.register = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
+        const userDataForRegistration = new userDTO.RegisterUserData(username, email, password);
 
-        const token = await userService.register(username, email, password);
+        const { newUser, token } = await userService.register(userDataForRegistration);
 
-        res.cookie("access-token", token, { maxAge: 3600 * 1000 });
-        return res.status(201).send("User registration successful.");
+        const user = new userDTO.UserData(newUser);
+
+        return res.status(201).send({ user, token });
     } catch (error) {
         return next(error);
     }
@@ -17,10 +20,13 @@ module.exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        const token = await userService.login(email, password);
+        const userData = new userDTO.LoginUserData(email, password);
 
-        res.cookie("access-token", token, { maxAge: 3600 * 1000 });
-        return res.status(200).send("User logged in successfully.");
+        const { sequelizeUser, token } = await userService.login(userData.email, userData.password);
+
+        const user = new userDTO.UserData(sequelizeUser);
+
+        return res.status(200).send({ user, token });
     } catch (error) {
         return next(error);
     }
@@ -32,10 +38,17 @@ module.exports.updateUserById = async (req, res, next) => {
         const loggedInUserId = req.loggedInUserId;
         const { oldPassword, newPassword } = req.body;
 
-        await userService.updateUserById(id, loggedInUserId, oldPassword, newPassword);
+        const userDataForUpdate = new userDTO.UserDataForUpdate(oldPassword, newPassword);
 
-        res.cookie("access-token", null, { maxAge: 0 });
-        return res.status(200).send("User updated successfully.");
+        const sequelizeUser = await userService.updateUserById(
+            id,
+            loggedInUserId,
+            userDataForUpdate.oldPassword,
+            userDataForUpdate.newPassword
+        );
+
+        const updatedUser = new userDTO.UserData(sequelizeUser);
+        return res.status(200).send(updatedUser);
     } catch (error) {
         return next(error);
     }
@@ -46,10 +59,10 @@ module.exports.deleteUserById = async (req, res, next) => {
         const { id } = req.params;
         const loggedInUserId = req.loggedInUserId;
 
-        await userService.deleteUserById(id, loggedInUserId);
+        const sequelizeUser = await userService.deleteUserById(id, loggedInUserId);
 
-        res.cookie("access-token", null, { maxAge: 0 });
-        return res.status(200).send("User deleted successfully.");
+        const deletedUser = new userDTO.UserData(sequelizeUser);
+        return res.status(200).send(deletedUser);
     } catch (error) {
         return next(error);
     }

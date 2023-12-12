@@ -3,9 +3,7 @@ const blogRepo = require("../repositories/blog.repository");
 const blogDTO = require("../dto/blog.dto");
 const formatData = require("../utils/formatData");
 
-module.exports.createBlog = async (title, blogContent, loggedInUserId) => {
-    const blogData = new blogDTO.CreateBlog(title, blogContent, loggedInUserId);
-
+module.exports.createBlog = async (blogData) => {
     return await blogRepo.createBlog(blogData);
 };
 
@@ -17,7 +15,7 @@ module.exports.getAllBlogs = async (contentType, limit, offset) => {
     return formatData(contentType, blogList);
 };
 
-module.exports.getBlogById = async (id, contentType) => {
+module.exports.getBlogById = async (id) => {
     const blog = await blogRepo.getBlogById(id);
 
     if (!blog) {
@@ -27,14 +25,10 @@ module.exports.getBlogById = async (id, contentType) => {
         throw error;
     }
 
-    const blogData = new blogDTO.GetBlogById(blog);
-
-    const formattedBlogData = formatData(contentType, blogData);
-
-    return formattedBlogData;
+    return blog;
 };
 
-module.exports.updateBlogById = async (id, title, blogContent, loggedInUserId) => {
+module.exports.updateBlogById = async (id, blogData) => {
     const blog = await blogRepo.getBlogById(id);
     if (!blog) {
         const error = new Error("Blog not found.");
@@ -43,14 +37,13 @@ module.exports.updateBlogById = async (id, title, blogContent, loggedInUserId) =
         throw error;
     }
 
-    if (loggedInUserId != blog.userId) {
+    if (blogData.userId != blog.userId) {
         const error = new Error("User is not authoroized to updated this blog.");
         error.message = "User is not authoroized to updated this blog.";
         error.status = 403;
         throw error;
     }
 
-    const blogData = new blogDTO.UpdateBlogById(title, blogContent);
     return await blogRepo.updateBlogById(blog, blogData);
 };
 

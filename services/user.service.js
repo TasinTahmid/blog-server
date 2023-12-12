@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const { createToken } = require("../utils/jwt");
 const userDTO = require("../dto/user.dto");
 
-module.exports.register = async (username, email, password) => {
+module.exports.register = async ({ username, email, password }) => {
     const userByUsername = await userRepo.getUserByUsername(username);
 
     if (userByUsername) {
@@ -25,26 +25,22 @@ module.exports.register = async (username, email, password) => {
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);
 
-    const userData = new userDTO.Register(username, email, hashPassword);
+    const newUser = await userRepo.createUser({ username, email, password: hashPassword });
 
-    const newUser = await userRepo.createUser(userData);
-
-    return createToken(newUser.id);
+    const token = createToken(newUser.id);
+    return { newUser, token };
 };
 
 module.exports.login = async (email, password) => {
-    const userData = new userDTO.Login(email, password);
-
-    const user = await userRepo.getUserByEmail(userData.email);
-
-    if (!user) {
+    const sequelizeUser = await userRepo.getUserByEmail(email);
+    if (!sequelizeUser) {
         const error = new Error("User not found.");
         error.message = "User not found.";
         error.status = 404;
         throw error;
     }
 
-    const isMatch = await bcrypt.compare(userData.password, user.password);
+    const isMatch = await bcrypt.compare(password, sequelizeUser.password);
     if (!isMatch) {
         const error = new Error("Invalid credentials.");
         error.message = "Invalid credentials.";
@@ -52,7 +48,9 @@ module.exports.login = async (email, password) => {
         throw error;
     }
 
-    return createToken(user.id);
+    const token = createToken(sequelizeUser.id);
+
+    return { sequelizeUser, token };
 };
 
 module.exports.updateUserById = async (id, loggedInUserId, oldPassword, newPassword) => {
@@ -82,9 +80,7 @@ module.exports.updateUserById = async (id, loggedInUserId, oldPassword, newPassw
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(newPassword, salt);
 
-    const userData = new userDTO.UpdateUserById(hashPassword);
-
-    return await userRepo.updateUserById(user, userData);
+    return await userRepo.updateUserById(user, { hashPassword });
 };
 
 module.exports.deleteUserById = async (id, loggedInUserId) => {

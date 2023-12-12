@@ -1,14 +1,19 @@
 const blogService = require("../services/blog.service");
 const calcLimitAndOffset = require("../utils/calculateLimitAndOffset");
+const blogDTO = require("../dto/blog.dto");
+const formatData = require("../utils/formatData");
 
 module.exports.createBlog = async (req, res, next) => {
     try {
         const { title, blogContent } = req.body;
         const loggedInUserId = req.loggedInUserId;
 
-        await blogService.createBlog(title, blogContent, loggedInUserId);
+        const newBlogData = new blogDTO.BlogDataToCreate({ title, blogContent, loggedInUserId });
 
-        return res.status(201).send("Blog created successfully.");
+        const sequelizeBlog = await blogService.createBlog(newBlogData);
+
+        const newBlog = new blogDTO.BlogData(sequelizeBlog);
+        return res.status(201).send(newBlog);
     } catch (error) {
         return next(error);
     }
@@ -31,12 +36,14 @@ module.exports.getAllBlogs = async (req, res, next) => {
 module.exports.getBlogById = async (req, res, next) => {
     try {
         const { id } = req.params;
-
         const contentType = res.get("Content-Type");
 
-        const blog = await blogService.getBlogById(id, contentType);
+        const blog = await blogService.getBlogById(id);
 
-        return res.status(200).send(blog);
+        const blogData = new blogDTO.BlogData(blog);
+
+        const formattedBlog = formatData(contentType, blogData);
+        return res.status(200).send(formattedBlog);
     } catch (error) {
         return next(error);
     }
@@ -47,10 +54,15 @@ module.exports.updateBlogById = async (req, res, next) => {
         const { id } = req.params;
         const { title, blogContent } = req.body;
         const loggedInUserId = req.loggedInUserId;
+        const contentType = res.get("Content-Type");
 
-        await blogService.updateBlogById(id, title, blogContent, loggedInUserId);
+        const blogData = new blogDTO.BlogDataForUpdate(title, blogContent, loggedInUserId);
 
-        return res.status(200).send("Blog updated successfully.");
+        const sequelizeBlog = await blogService.updateBlogById(id, blogData);
+        const updatedBlog = new blogDTO.BlogData(sequelizeBlog);
+        const formattedBlog = formatData(contentType, updatedBlog);
+
+        return res.status(200).send(formattedBlog);
     } catch (error) {
         return next(error);
     }
@@ -60,10 +72,13 @@ module.exports.deleteBlogById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const loggedInUserId = req.loggedInUserId;
+        const contentType = res.get("Content-Type");
 
-        await blogService.deleteBlogById(id, loggedInUserId);
+        const sequelizeBlog = await blogService.deleteBlogById(id, loggedInUserId);
+        const deletedBlog = new blogDTO.BlogData(sequelizeBlog);
+        const formattedBlog = formatData(contentType, deletedBlog);
 
-        return res.status(200).send("Blog deleted successfully.");
+        return res.status(200).send(formattedBlog);
     } catch (error) {
         return next(error);
     }
