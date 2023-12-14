@@ -1,8 +1,8 @@
 const xml2js = require("xml2js");
 
 const changeFormat = {
-    "application/json": (data) => (data.blogList ? data.blogList : data),
-    "application/xml": (data) => {
+    json: (data) => (data.blogList ? data.blogList : data),
+    xml: (data) => {
         const builder = new xml2js.Builder();
         let objData = data;
 
@@ -18,7 +18,7 @@ const changeFormat = {
         return xmlData;
     },
 
-    "text/html": (data) => {
+    html: (data) => {
         let html = "<ul>";
 
         if (data.blogList) {
@@ -46,7 +46,7 @@ const changeFormat = {
         return html;
     },
 
-    "text/plain": (data) => {
+    text: (data) => {
         let text = "";
         if (data.blogList) {
             data.blogList.map((blog, idx) => {
@@ -66,9 +66,7 @@ const changeFormat = {
     },
 };
 
-const formatData = (contentType, data) => {
-    const format = contentType.split(";")[0];
-    console.log("fomrat", format);
+const formatData = (format, data) => {
     return changeFormat[format](data);
 };
 

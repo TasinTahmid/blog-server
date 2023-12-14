@@ -11,9 +11,11 @@ module.exports.createBlog = async (req, res, next) => {
         const newBlogData = new blogDTO.BlogDataToCreate({ title, blogContent, loggedInUserId });
 
         const sequelizeBlog = await blogService.createBlog(newBlogData);
-
         const newBlog = new blogDTO.BlogData(sequelizeBlog);
-        return res.status(201).send(newBlog);
+
+        const formattedBlog = formatData(req.format, newBlog);
+
+        return res.status(201).send(formattedBlog);
     } catch (error) {
         return next(error);
     }
@@ -21,13 +23,15 @@ module.exports.createBlog = async (req, res, next) => {
 
 module.exports.getAllBlogs = async (req, res, next) => {
     try {
-        const contentType = res.get("Content-Type");
         const { page, size } = req.query;
         const { limit, offset } = await calcLimitAndOffset(Number(page), Number(size));
 
-        const blogList = await blogService.getAllBlogs(contentType, limit, offset);
+        const sequelizeBlogList = await blogService.getAllBlogs(limit, offset);
+        const blogList = new blogDTO.GetAllBlogs(sequelizeBlogList);
 
-        return res.status(200).send(blogList);
+        const formattedBlogList = formatData(req.format, blogList);
+
+        return res.status(200).send(formattedBlogList);
     } catch (error) {
         return next(error);
     }
@@ -36,13 +40,12 @@ module.exports.getAllBlogs = async (req, res, next) => {
 module.exports.getBlogById = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const contentType = res.get("Content-Type");
 
-        const blog = await blogService.getBlogById(id);
+        const sequelizeBlog = await blogService.getBlogById(id);
+        const blog = new blogDTO.BlogData(sequelizeBlog);
 
-        const blogData = new blogDTO.BlogData(blog);
+        const formattedBlog = formatData(req.format, blog);
 
-        const formattedBlog = formatData(contentType, blogData);
         return res.status(200).send(formattedBlog);
     } catch (error) {
         return next(error);
@@ -54,13 +57,13 @@ module.exports.updateBlogById = async (req, res, next) => {
         const { id } = req.params;
         const { title, blogContent } = req.body;
         const loggedInUserId = req.loggedInUserId;
-        const contentType = res.get("Content-Type");
 
         const blogData = new blogDTO.BlogDataForUpdate(title, blogContent, loggedInUserId);
 
         const sequelizeBlog = await blogService.updateBlogById(id, blogData);
         const updatedBlog = new blogDTO.BlogData(sequelizeBlog);
-        const formattedBlog = formatData(contentType, updatedBlog);
+
+        const formattedBlog = formatData(req.format, updatedBlog);
 
         return res.status(200).send(formattedBlog);
     } catch (error) {
@@ -72,11 +75,11 @@ module.exports.deleteBlogById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const loggedInUserId = req.loggedInUserId;
-        const contentType = res.get("Content-Type");
 
         const sequelizeBlog = await blogService.deleteBlogById(id, loggedInUserId);
         const deletedBlog = new blogDTO.BlogData(sequelizeBlog);
-        const formattedBlog = formatData(contentType, deletedBlog);
+
+        const formattedBlog = formatData(req.format, deletedBlog);
 
         return res.status(200).send(formattedBlog);
     } catch (error) {

@@ -7,12 +7,9 @@ module.exports.createBlog = async (blogData) => {
     return await blogRepo.createBlog(blogData);
 };
 
-module.exports.getAllBlogs = async (contentType, limit, offset) => {
+module.exports.getAllBlogs = async (limit, offset) => {
     const sequelizeBlogList = await blogRepo.getAllBlogs(limit, offset);
-    const blogResponse = sequelizeBlogList.map((e) => e.dataValues);
-    const blogList = new blogDTO.GetAllBlogs(blogResponse);
-
-    return formatData(contentType, blogList);
+    return sequelizeBlogList.map((e) => e.dataValues);
 };
 
 module.exports.getBlogById = async (id) => {

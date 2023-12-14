@@ -1,5 +1,6 @@
 const userService = require("../services/user.service");
 const userDTO = require("../dto/user.dto");
+const formatData = require("../utils/formatData");
 
 module.exports.register = async (req, res, next) => {
     try {
@@ -10,7 +11,9 @@ module.exports.register = async (req, res, next) => {
 
         const user = new userDTO.UserData(newUser);
 
-        return res.status(201).send({ user, token });
+        const formattedResponse = formatData(req.format, { user, token });
+
+        return res.status(201).send(formattedResponse);
     } catch (error) {
         return next(error);
     }
@@ -26,7 +29,9 @@ module.exports.login = async (req, res, next) => {
 
         const user = new userDTO.UserData(sequelizeUser);
 
-        return res.status(200).send({ user, token });
+        const formattedResponse = formatData(req.format, { user, token });
+
+        return res.status(200).send(formattedResponse);
     } catch (error) {
         return next(error);
     }
@@ -46,9 +51,11 @@ module.exports.updateUserById = async (req, res, next) => {
             userDataForUpdate.oldPassword,
             userDataForUpdate.newPassword
         );
-
         const updatedUser = new userDTO.UserData(sequelizeUser);
-        return res.status(200).send(updatedUser);
+
+        const formattedResponse = formatData(req.format, updatedUser);
+
+        return res.status(200).send(formattedResponse);
     } catch (error) {
         return next(error);
     }
@@ -62,7 +69,10 @@ module.exports.deleteUserById = async (req, res, next) => {
         const sequelizeUser = await userService.deleteUserById(id, loggedInUserId);
 
         const deletedUser = new userDTO.UserData(sequelizeUser);
-        return res.status(200).send(deletedUser);
+
+        const formattedResponse = formatData(req.format, deletedUser);
+
+        return res.status(200).send(formattedResponse);
     } catch (error) {
         return next(error);
     }
