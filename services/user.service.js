@@ -1,7 +1,6 @@
 const userRepo = require("../repositories/user.repository");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../utils/jwt");
-const userDTO = require("../dto/user.dto");
 
 module.exports.register = async ({ username, email, password }) => {
     const userByUsername = await userRepo.getUserByUsername(username);

@@ -1,7 +1,4 @@
-const userRepo = require("../repositories/user.repository");
 const blogRepo = require("../repositories/blog.repository");
-const blogDTO = require("../dto/blog.dto");
-const formatData = require("../utils/formatData");
 
 module.exports.createBlog = async (blogData) => {
     return await blogRepo.createBlog(blogData);
