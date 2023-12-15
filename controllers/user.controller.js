@@ -6,7 +6,6 @@ module.exports.register = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
         const userDataForRegistration = new userDTO.RegisterUserData(username, email, password);
-
         const { newUser, token } = await userService.register(userDataForRegistration);
 
         const user = new userDTO.UserData(newUser);
@@ -41,7 +40,6 @@ module.exports.updateUserById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const loggedInUserId = req.loggedInUserId;
-        console.log("log id", loggedInUserId);
         const { oldPassword, newPassword } = req.body;
 
         const userDataForUpdate = new userDTO.UserDataForUpdate(oldPassword, newPassword);

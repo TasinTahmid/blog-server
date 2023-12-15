@@ -67,6 +67,7 @@ const changeFormat = {
 };
 
 const formatData = (format, data) => {
+    console.log("in format  ,,,,,,", format);
     return changeFormat[format](data);
 };
 

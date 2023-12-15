@@ -55,6 +55,7 @@ module.exports.getBlogById = async (req, res, next) => {
 module.exports.updateBlogById = async (req, res, next) => {
     try {
         const { id } = req.params;
+
         const { title, blogContent } = req.body;
         const loggedInUserId = req.loggedInUserId;
 
