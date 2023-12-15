@@ -12,8 +12,11 @@ module.exports = async (req, res, next) => {
         const token = authHeader.split("Bearer ")[1];
 
         const { id } = validateToken(token);
+        if (!id) {
+            throw new CustomError(401, "Authentication needed.");
+        }
 
-        const user = userRepo.getUserById(id);
+        const user = await userRepo.getUserById(id);
         if (!user) {
             throw new CustomError(401, "Authentication needed.");
         }

@@ -8,11 +8,7 @@ const createToken = (userId) => {
 };
 
 const validateToken = (token) => {
-    try {
-        return jwt.verify(token, secret);
-    } catch (e) {
-        throw new CustomError(401, "Authentication needed.");
-    }
+    return jwt.verify(token, secret);
 };
 
 module.exports = { createToken, validateToken };

@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const { createToken } = require("../utils/jwt");
 const CustomError = require("../utils/createCustomeError");
 
-module.exports.register = async ({ username, email, password }) => {
+module.exports.register = async (userData) => {
+    const { username, email, password } = userData;
     const userByUsername = await userRepo.getUserByUsername(username);
 
     if (userByUsername) {
@@ -19,7 +20,11 @@ module.exports.register = async ({ username, email, password }) => {
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);
 
-    const newUser = await userRepo.createUser({ username, email, password: hashPassword });
+    const newUser = await userRepo.createUser({
+        username,
+        email,
+        password: hashPassword,
+    });
 
     const token = createToken(newUser.id);
     return { newUser, token };
@@ -41,7 +46,12 @@ module.exports.login = async (email, password) => {
     return { sequelizeUser, token };
 };
 
-module.exports.updateUserById = async (id, loggedInUserId, oldPassword, newPassword) => {
+module.exports.updateUserById = async (
+    id,
+    loggedInUserId,
+    oldPassword,
+    newPassword
+) => {
     const user = await userRepo.getUserById(id);
     if (!user) {
         throw new CustomError(404, "User not found.");
@@ -51,7 +61,6 @@ module.exports.updateUserById = async (id, loggedInUserId, oldPassword, newPassw
         throw new CustomError(403, "User is not authorized.");
     }
 
-    console.log("xxxxxxxxxxx", oldPassword, user.password);
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
         throw new CustomError(400, "Invalid credentials.");
