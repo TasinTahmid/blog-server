@@ -1,24 +1,19 @@
 const userRepo = require("../repositories/user.repository");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../utils/jwt");
+const CustomError = require("../utils/createCustomeError");
 
 module.exports.register = async ({ username, email, password }) => {
     const userByUsername = await userRepo.getUserByUsername(username);
 
     if (userByUsername) {
-        const error = new Error("User already exists by this username.");
-        error.message = "User already exists by this username.";
-        error.status = 400;
-        throw error;
+        throw new CustomError(400, "User already exists by this username.");
     }
 
     const userByEmail = await userRepo.getUserByEmail(email);
 
     if (userByEmail) {
-        const error = new Error("User already existsby this email.");
-        error.message = "User already exists by this email.";
-        error.status = 400;
-        throw error;
+        throw new CustomError(400, "User already exists by this email.");
     }
 
     const salt = await bcrypt.genSalt();
@@ -33,18 +28,12 @@ module.exports.register = async ({ username, email, password }) => {
 module.exports.login = async (email, password) => {
     const sequelizeUser = await userRepo.getUserByEmail(email);
     if (!sequelizeUser) {
-        const error = new Error("User not found.");
-        error.message = "User not found.";
-        error.status = 404;
-        throw error;
+        throw new CustomError(404, "User not found.");
     }
 
     const isMatch = await bcrypt.compare(password, sequelizeUser.password);
     if (!isMatch) {
-        const error = new Error("Invalid credentials.");
-        error.message = "Invalid credentials.";
-        error.status = 400;
-        throw error;
+        throw new CustomError(400, "Invalid credentials.");
     }
 
     const token = createToken(sequelizeUser.id);
@@ -55,47 +44,32 @@ module.exports.login = async (email, password) => {
 module.exports.updateUserById = async (id, loggedInUserId, oldPassword, newPassword) => {
     const user = await userRepo.getUserById(id);
     if (!user) {
-        const error = new Error("User not found.");
-        error.message = "User not found.";
-        error.status = 404;
-        throw error;
+        throw new CustomError(404, "User not found.");
     }
 
     if (loggedInUserId != user.id) {
-        const error = new Error("User is not authorized.");
-        error.message = "User is not authorized.";
-        error.status = 403;
-        throw error;
+        throw new CustomError(403, "User is not authorized.");
     }
 
+    console.log("xxxxxxxxxxx", oldPassword, user.password);
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
-        const error = new Error("Invalid credentials.");
-        error.message = "Invalid credentials.";
-        error.status = 400;
-        throw error;
+        throw new CustomError(400, "Invalid credentials.");
     }
-
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(newPassword, salt);
 
-    return await userRepo.updateUserById(user, { hashPassword });
+    return await userRepo.updateUserById(user, hashPassword);
 };
 
 module.exports.deleteUserById = async (id, loggedInUserId) => {
     const user = await userRepo.getUserById(id);
     if (!user) {
-        const error = new Error("User not found.");
-        error.message = "User not found.";
-        error.status = 404;
-        throw error;
+        throw new CustomError(404, "User not found.");
     }
 
     if (loggedInUserId != user.id) {
-        const error = new Error("User is not authorized.");
-        error.message = "User is not authorized.";
-        error.status = 403;
-        throw error;
+        throw new CustomError(403, "User is not authorized.");
     }
 
     return await userRepo.deleteUserById(user);

@@ -41,6 +41,7 @@ module.exports.updateUserById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const loggedInUserId = req.loggedInUserId;
+        console.log("log id", loggedInUserId);
         const { oldPassword, newPassword } = req.body;
 
         const userDataForUpdate = new userDTO.UserDataForUpdate(oldPassword, newPassword);

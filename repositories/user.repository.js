@@ -16,8 +16,9 @@ module.exports.createUser = async (userData) => {
     return await User.create(userData);
 };
 
-module.exports.updateUserById = async (user, userData) => {
-    return await user.update(userData);
+module.exports.updateUserById = async (user, newHashedPassword) => {
+    const updval = await user.update({ password: newHashedPassword });
+    return updval;
 };
 
 module.exports.deleteUserById = async (user) => {

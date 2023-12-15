@@ -1,4 +1,5 @@
 const blogRepo = require("../repositories/blog.repository");
+const CustomError = require("../utils/createCustomeError");
 
 module.exports.createBlog = async (blogData) => {
     return await blogRepo.createBlog(blogData);
@@ -13,10 +14,7 @@ module.exports.getBlogById = async (id) => {
     const blog = await blogRepo.getBlogById(id);
 
     if (!blog) {
-        const error = new Error("Blog not found.");
-        error.message = "Blog not found.";
-        error.status = 404;
-        throw error;
+        throw new CustomError(404, "Blog not found.");
     }
 
     return blog;
@@ -25,17 +23,11 @@ module.exports.getBlogById = async (id) => {
 module.exports.updateBlogById = async (id, blogData) => {
     const blog = await blogRepo.getBlogById(id);
     if (!blog) {
-        const error = new Error("Blog not found.");
-        error.message = "Blog not found.";
-        error.status = 404;
-        throw error;
+        throw new CustomError(404, "Blog not found.");
     }
 
     if (blogData.userId != blog.userId) {
-        const error = new Error("User is not authoroized to updated this blog.");
-        error.message = "User is not authoroized to updated this blog.";
-        error.status = 403;
-        throw error;
+        throw new CustomError(403, "User is not authoroized to updated this blog.");
     }
 
     return await blogRepo.updateBlogById(blog, blogData);
@@ -44,17 +36,11 @@ module.exports.updateBlogById = async (id, blogData) => {
 module.exports.deleteBlogById = async (id, loggedInUserId) => {
     const blog = await blogRepo.getBlogById(id);
     if (!blog) {
-        const error = new Error("Blog not found.");
-        error.message = "Blog not found.";
-        error.status = 404;
-        throw error;
+        throw new CustomError(404, "Blog not found.");
     }
 
     if (loggedInUserId != blog.userId) {
-        const error = new Error("User is not authoroized to delete this blog.");
-        error.message = "User is not authoroized to delete this blog.";
-        error.status = 403;
-        throw error;
+        throw new CustomError(403, "User is not authoroized to delete this blog.");
     }
 
     return await blogRepo.deleteBlogById(blog);
