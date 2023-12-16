@@ -81,8 +81,32 @@ describe("Testing authentication middleware.", () => {
         expect(next).toHaveBeenCalledTimes(1);
         expect(next).toHaveBeenCalledWith(mockError);
     });
+    it("Test-case 4: Should throw 'Authentication needed' error by calling next with error when Bearer token doesn't have id.", async () => {
+        // Arrange
+        const req = {
+            headers: { authorization: "Bearer mock-token" },
+        };
+        const res = {};
+        const next = jest.fn();
+        const mockUser = {
+            id: "mock-id",
+            username: "mock-username",
+            email: "mock@gmail.com",
+            password: "1234",
+        };
+        const mockError = new Error("Authentication needed.");
+        validateToken.mockReturnValue({});
+        jest.spyOn(userRepo, "getUserById").mockResolvedValue(mockUser);
 
-    it("Test-case 4: Should throw 'Authentication needed' error by calling next with error when access-token is invalid or expired.", async () => {
+        // Act
+        await authenticateUser(req, res, next);
+
+        // Assert
+        expect(next).toHaveBeenCalledTimes(1);
+        expect(next).toHaveBeenCalledWith(mockError);
+    });
+
+    it("Test-case 5: Should throw 'Authentication needed' error by calling next with error when access-token is invalid or expired.", async () => {
         // Arrange
         const req = {
             headers: { authorization: "Bearer mock-token" },

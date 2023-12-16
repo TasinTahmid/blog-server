@@ -52,13 +52,13 @@ module.exports.updateUserById = async (
     oldPassword,
     newPassword
 ) => {
+    if (loggedInUserId != id) {
+        throw new CustomError(403, "User is not authorized.");
+    }
+
     const user = await userRepo.getUserById(id);
     if (!user) {
         throw new CustomError(404, "User not found.");
-    }
-
-    if (loggedInUserId != user.id) {
-        throw new CustomError(403, "User is not authorized.");
     }
 
     const isMatch = await bcrypt.compare(oldPassword, user.password);
@@ -72,13 +72,13 @@ module.exports.updateUserById = async (
 };
 
 module.exports.deleteUserById = async (id, loggedInUserId) => {
+    if (loggedInUserId != id) {
+        throw new CustomError(403, "User is not authorized.");
+    }
+
     const user = await userRepo.getUserById(id);
     if (!user) {
         throw new CustomError(404, "User not found.");
-    }
-
-    if (loggedInUserId != user.id) {
-        throw new CustomError(403, "User is not authorized.");
     }
 
     return await userRepo.deleteUserById(user);

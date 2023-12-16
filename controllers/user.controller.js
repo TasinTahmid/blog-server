@@ -5,8 +5,14 @@ const formatData = require("../utils/formatData");
 module.exports.register = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
-        const userDataForRegistration = new userDTO.RegisterUserData(username, email, password);
-        const { newUser, token } = await userService.register(userDataForRegistration);
+        const userDataForRegistration = new userDTO.RegisterUserData(
+            username,
+            email,
+            password
+        );
+        const { newUser, token } = await userService.register(
+            userDataForRegistration
+        );
 
         const user = new userDTO.UserData(newUser);
 
@@ -24,7 +30,10 @@ module.exports.login = async (req, res, next) => {
 
         const userData = new userDTO.LoginUserData(email, password);
 
-        const { sequelizeUser, token } = await userService.login(userData.email, userData.password);
+        const { sequelizeUser, token } = await userService.login(
+            userData.email,
+            userData.password
+        );
 
         const user = new userDTO.UserData(sequelizeUser);
 
@@ -42,7 +51,10 @@ module.exports.updateUserById = async (req, res, next) => {
         const loggedInUserId = req.loggedInUserId;
         const { oldPassword, newPassword } = req.body;
 
-        const userDataForUpdate = new userDTO.UserDataForUpdate(oldPassword, newPassword);
+        const userDataForUpdate = new userDTO.UserDataForUpdate(
+            oldPassword,
+            newPassword
+        );
 
         const sequelizeUser = await userService.updateUserById(
             id,
@@ -65,7 +77,10 @@ module.exports.deleteUserById = async (req, res, next) => {
         const { id } = req.params;
         const loggedInUserId = req.loggedInUserId;
 
-        const sequelizeUser = await userService.deleteUserById(id, loggedInUserId);
+        const sequelizeUser = await userService.deleteUserById(
+            id,
+            loggedInUserId
+        );
 
         const deletedUser = new userDTO.UserData(sequelizeUser);
 
