@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const CustomError = require("../utils/createCustomeError");
 
 const createToken = (userId) => {
     const secret = process.env.JWT_SECRET;
@@ -9,10 +8,9 @@ const createToken = (userId) => {
 const validateToken = (token) => {
     try {
         const secret = process.env.JWT_SECRET;
-        const anse = jwt.verify(token, secret);
-        return anse;
+        return jwt.verify(token, secret);
     } catch (error) {
-        return new CustomError(401, "Authentication needed.");
+        return error;
     }
 };
 
