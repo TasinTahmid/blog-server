@@ -1,7 +1,9 @@
 const Blog = require("../models/blog.model");
 
 module.exports.createBlog = async (blogData) => {
-    return await Blog.create(blogData);
+    const blog = await Blog.create(blogData);
+    console.log("repo...", blog);
+    return blog;
 };
 
 module.exports.getAllBlogs = async (limit, offset) => {

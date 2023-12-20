@@ -10,6 +10,7 @@ const validateUser = (userSchema) => async (req, res, next) => {
 
         next();
     } catch (err) {
+        console.log("valditaion..", err.errors[0]);
         return res.status(400).send(err.errors[0]);
     }
 };
