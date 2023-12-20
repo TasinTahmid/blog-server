@@ -16,9 +16,7 @@ describe("Testing blogServices.", () => {
                 blogContent: "test content.",
                 userId: "c02e43c9-0786-44db-8089-2355cccf5850",
             };
-            jest.spyOn(blogRepo, "createBlog").mockResolvedValue(
-                mockCreatedBlog
-            );
+            jest.spyOn(blogRepo, "createBlog").mockResolvedValue(mockCreatedBlog);
             // Act
             await blogService.createBlog(mockBlog);
             // Assert
@@ -35,9 +33,7 @@ describe("Testing blogServices.", () => {
             const mockError = new Error("Internal server error");
             jest.spyOn(blogRepo, "createBlog").mockRejectedValue(mockError);
             // Act & Assert
-            await expect(blogService.createBlog(mockBlog)).rejects.toThrow(
-                mockError
-            );
+            await expect(blogService.createBlog(mockBlog)).rejects.toThrow(mockError);
         });
     });
     describe("2. getAllBlogs method.", () => {
@@ -75,9 +71,7 @@ describe("Testing blogServices.", () => {
             };
             jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(null);
             // Act & Assert
-            expect(blogService.getBlogById(id)).rejects.toThrow(
-                new Error("Blog not found.")
-            );
+            expect(blogService.getBlogById(id)).rejects.toThrow(new Error("Blog not found."));
         });
     });
     describe("4. updateBlogById method.", () => {
@@ -94,19 +88,12 @@ describe("Testing blogServices.", () => {
                 blogContent: "test content.",
                 userId: "author-id",
             };
-            jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(
-                mockUpdatedBlog
-            );
-            jest.spyOn(blogRepo, "updateBlogById").mockResolvedValue(
-                mockUpdatedBlog
-            );
+            jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(mockUpdatedBlog);
+            jest.spyOn(blogRepo, "updateBlogById").mockResolvedValue(mockUpdatedBlog);
             // Act
             await blogService.updateBlogById(id, mockBlogData);
             // Assert
-            expect(blogRepo.updateBlogById).toHaveBeenCalledWith(
-                mockUpdatedBlog,
-                mockBlogData
-            );
+            expect(blogRepo.updateBlogById).toHaveBeenCalledWith(mockUpdatedBlog, mockBlogData);
         });
         it("Test-case 2: Should throw 'Blog not found' error with status code 404", async () => {
             const id = "blog-id";
@@ -122,13 +109,11 @@ describe("Testing blogServices.", () => {
                 userId: "author-id",
             };
             jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(null);
-            jest.spyOn(blogRepo, "updateBlogById").mockResolvedValue(
-                mockUpdatedBlog
-            );
+            jest.spyOn(blogRepo, "updateBlogById").mockResolvedValue(mockUpdatedBlog);
             // Act & Assert
-            expect(
-                blogService.updateBlogById(id, mockBlogData)
-            ).rejects.toThrow(new Error("Blog not found."));
+            expect(blogService.updateBlogById(id, mockBlogData)).rejects.toThrow(
+                new Error("Blog not found.")
+            );
         });
         it("Test-case 3: Should throw 'User not authorized' error with status code 403", async () => {
             const id = "blog-id";
@@ -143,16 +128,10 @@ describe("Testing blogServices.", () => {
                 blogContent: "test content.",
                 userId: "author-id",
             };
-            jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(
-                mockUpdatedBlog
-            );
-            jest.spyOn(blogRepo, "updateBlogById").mockResolvedValue(
-                mockUpdatedBlog
-            );
+            jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(mockUpdatedBlog);
+            jest.spyOn(blogRepo, "updateBlogById").mockResolvedValue(mockUpdatedBlog);
             // Act & Assert
-            expect(
-                blogService.updateBlogById(id, mockBlogData)
-            ).rejects.toThrow(
+            expect(blogService.updateBlogById(id, mockBlogData)).rejects.toThrow(
                 new Error("User is not authoroized to updated this blog.")
             );
         });
@@ -167,18 +146,12 @@ describe("Testing blogServices.", () => {
                 blogContent: "test content.",
                 userId: "author-id",
             };
-            jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(
-                mockDeletedBlog
-            );
-            jest.spyOn(blogRepo, "deleteBlogById").mockResolvedValue(
-                mockDeletedBlog
-            );
+            jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(mockDeletedBlog);
+            jest.spyOn(blogRepo, "deleteBlogById").mockResolvedValue(mockDeletedBlog);
             // Act
             await blogService.deleteBlogById(id, loggedInUserId);
             // Assert
-            expect(
-                blogService.deleteBlogById(id, loggedInUserId)
-            ).resolves.toBe(mockDeletedBlog);
+            expect(blogService.deleteBlogById(id, loggedInUserId)).resolves.toBe(mockDeletedBlog);
         });
         it("Test-case 2: Should throw 'Blog not found' error with status code 404", async () => {
             const id = "blog-id";
@@ -190,13 +163,11 @@ describe("Testing blogServices.", () => {
                 userId: "author-id",
             };
             jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(null);
-            jest.spyOn(blogRepo, "deleteBlogById").mockResolvedValue(
-                mockDeletedBlog
-            );
+            jest.spyOn(blogRepo, "deleteBlogById").mockResolvedValue(mockDeletedBlog);
             // Act & Assert
-            expect(
-                blogService.deleteBlogById(id, loggedInUserId)
-            ).rejects.toThrow(new Error("Blog not found."));
+            expect(blogService.deleteBlogById(id, loggedInUserId)).rejects.toThrow(
+                new Error("Blog not found.")
+            );
         });
         it("Test-case 3: Should throw 'User not authorized' error with status code 403", async () => {
             const id = "blog-id";
@@ -207,16 +178,10 @@ describe("Testing blogServices.", () => {
                 blogContent: "test content.",
                 userId: "another-author-id",
             };
-            jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(
-                mockDeletedBlog
-            );
-            jest.spyOn(blogRepo, "deleteBlogById").mockResolvedValue(
-                mockDeletedBlog
-            );
+            jest.spyOn(blogRepo, "getBlogById").mockResolvedValue(mockDeletedBlog);
+            jest.spyOn(blogRepo, "deleteBlogById").mockResolvedValue(mockDeletedBlog);
             // Act & Assert
-            expect(
-                blogService.deleteBlogById(id, loggedInUserId)
-            ).rejects.toThrow(
+            expect(blogService.deleteBlogById(id, loggedInUserId)).rejects.toThrow(
                 new Error("User is not authoroized to delete this blog.")
             );
         });

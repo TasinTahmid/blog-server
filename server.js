@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 require("dotenv").config();
 const v1Routes = require("./routes");
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 5001;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 app.use(contentNegotiator);
 app.use("/api/v1/", v1Routes);
