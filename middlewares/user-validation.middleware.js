@@ -1,3 +1,5 @@
+const CustomError = require("../utils/createCustomeError");
+
 const validateUser = (userSchema) => async (req, res, next) => {
     try {
         if (req.path == "/register") {
@@ -10,8 +12,9 @@ const validateUser = (userSchema) => async (req, res, next) => {
 
         next();
     } catch (err) {
-        console.log("valditaion..", err.errors[0]);
-        return res.status(400).send(err.errors[0]);
+        console.log("valditaion..", typeof err.errors[0]);
+        const validationError = new CustomError(400, err.errors[0]);
+        next(validationError);
     }
 };
 
