@@ -14,6 +14,7 @@ class GetAllBlogs {
             obj.title = blog.title;
             obj.blogContent = blog.blogContent;
             obj.userId = blog.userId;
+            obj.createdAt = blog.createdAt;
             return obj;
         });
     }
@@ -25,6 +26,7 @@ class BlogData {
         this.title = blog.title;
         this.blogContent = blog.blogContent;
         this.userId = blog.userId;
+        this.createdAt = blog.createdAt;
     }
 }
 

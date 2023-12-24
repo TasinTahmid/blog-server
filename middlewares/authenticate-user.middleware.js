@@ -5,7 +5,8 @@ const CustomError = require("../utils/createCustomeError");
 module.exports = async (req, res, next) => {
     try {
         console.log("inn");
-        const authHeader = req.headers["Authorization"];
+        console.log("all headers", req.headers);
+        const authHeader = req.headers["authorization"];
         console.log("authHeader....", authHeader);
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
             throw new CustomError(401, "Authentication needed.");

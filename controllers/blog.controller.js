@@ -8,7 +8,11 @@ module.exports.createBlog = async (req, res, next) => {
         const { title, blogContent } = req.body;
         const loggedInUserId = req.loggedInUserId;
 
-        const newBlogData = new blogDTO.BlogDataToCreate({ title, blogContent, loggedInUserId });
+        const newBlogData = new blogDTO.BlogDataToCreate({
+            title,
+            blogContent,
+            loggedInUserId,
+        });
 
         const sequelizeBlog = await blogService.createBlog(newBlogData);
         const newBlog = new blogDTO.BlogData(sequelizeBlog);
@@ -24,7 +28,10 @@ module.exports.createBlog = async (req, res, next) => {
 module.exports.getAllBlogs = async (req, res, next) => {
     try {
         const { page, size } = req.query;
-        const { limit, offset } = await calcLimitAndOffset(Number(page), Number(size));
+        const { limit, offset } = await calcLimitAndOffset(
+            Number(page),
+            Number(size)
+        );
 
         const sequelizeBlogList = await blogService.getAllBlogs(limit, offset);
         const blogList = new blogDTO.GetAllBlogs(sequelizeBlogList);
@@ -59,7 +66,11 @@ module.exports.updateBlogById = async (req, res, next) => {
         const { title, blogContent } = req.body;
         const loggedInUserId = req.loggedInUserId;
 
-        const blogData = new blogDTO.BlogDataForUpdate(title, blogContent, loggedInUserId);
+        const blogData = new blogDTO.BlogDataForUpdate(
+            title,
+            blogContent,
+            loggedInUserId
+        );
 
         const sequelizeBlog = await blogService.updateBlogById(id, blogData);
         const updatedBlog = new blogDTO.BlogData(sequelizeBlog);
@@ -77,7 +88,10 @@ module.exports.deleteBlogById = async (req, res, next) => {
         const { id } = req.params;
         const loggedInUserId = req.loggedInUserId;
 
-        const sequelizeBlog = await blogService.deleteBlogById(id, loggedInUserId);
+        const sequelizeBlog = await blogService.deleteBlogById(
+            id,
+            loggedInUserId
+        );
         const deletedBlog = new blogDTO.BlogData(sequelizeBlog);
 
         const formattedBlog = formatData(req.format, deletedBlog);
