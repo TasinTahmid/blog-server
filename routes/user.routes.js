@@ -7,5 +7,6 @@ router.post("/register", controller.register);
 router.post("/login", controller.login);
 router.patch("/:id", authenticateUser, controller.updateUserById);
 router.delete("/:id", authenticateUser, controller.deleteUserById);
+router.get("/:id/blogs", controller.getUserBlogsByUserId);
 
 module.exports = router;

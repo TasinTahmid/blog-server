@@ -13,6 +13,12 @@ module.exports.getAllBlogs = async (limit, offset) => {
     });
 };
 
+module.exports.getBlogsByUserId = async (id) => {
+    return await Blog.findAll({
+        where: { userId: id },
+    });
+};
+
 module.exports.getBlogById = async (id) => {
     return await Blog.findOne({ where: { id } });
 };

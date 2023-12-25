@@ -7,7 +7,11 @@ module.exports.createBlog = async (blogData) => {
 
 module.exports.getAllBlogs = async (limit, offset) => {
     const sequelizeBlogList = await blogRepo.getAllBlogs(limit, offset);
-    return sequelizeBlogList.map((e) => e.dataValues);
+    return sequelizeBlogList.map((blog) => blog.dataValues);
+};
+module.exports.getBlogsByUserId = async (id) => {
+    const sequelizeBlogList = await blogRepo.getBlogsByUserId(id);
+    return sequelizeBlogList.map((blog) => blog.dataValues);
 };
 
 module.exports.getBlogById = async (id) => {
@@ -27,7 +31,10 @@ module.exports.updateBlogById = async (id, blogData) => {
     }
 
     if (blogData.userId != blog.userId) {
-        throw new CustomError(403, "User is not authoroized to updated this blog.");
+        throw new CustomError(
+            403,
+            "User is not authoroized to updated this blog."
+        );
     }
 
     return await blogRepo.updateBlogById(blog, blogData);
@@ -40,7 +47,10 @@ module.exports.deleteBlogById = async (id, loggedInUserId) => {
     }
 
     if (loggedInUserId != blog.userId) {
-        throw new CustomError(403, "User is not authoroized to delete this blog.");
+        throw new CustomError(
+            403,
+            "User is not authoroized to delete this blog."
+        );
     }
 
     return await blogRepo.deleteBlogById(blog);

@@ -1,4 +1,5 @@
 const userService = require("../services/user.service");
+const blogService = require("../services/blog.service");
 const userDTO = require("../dto/user.dto");
 const formatData = require("../utils/formatData");
 
@@ -87,6 +88,18 @@ module.exports.deleteUserById = async (req, res, next) => {
         const formattedResponse = formatData(req.format, deletedUser);
 
         return res.status(200).send(formattedResponse);
+    } catch (error) {
+        return next(error);
+    }
+};
+
+module.exports.getUserBlogsByUserId = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const userBlogs = await blogService.getBlogsByUserId(id);
+
+        return res.status(200).send(userBlogs);
     } catch (error) {
         return next(error);
     }
