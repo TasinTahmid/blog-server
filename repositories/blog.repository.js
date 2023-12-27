@@ -10,12 +10,14 @@ module.exports.getAllBlogs = async (limit, offset) => {
     return await Blog.findAll({
         limit,
         offset,
+        order: [["createdAt", "DESC"]],
     });
 };
 
 module.exports.getBlogsByUserId = async (id) => {
     return await Blog.findAll({
         where: { userId: id },
+        order: [["createdAt", "DESC"]],
     });
 };
 
