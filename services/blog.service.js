@@ -6,12 +6,17 @@ module.exports.createBlog = async (blogData) => {
 };
 
 module.exports.getAllBlogs = async (limit, offset) => {
-    const sequelizeBlogList = await blogRepo.getAllBlogs(limit, offset);
-    return sequelizeBlogList.map((blog) => blog.dataValues);
+    const countAndBlogList = await blogRepo.getAllBlogs(limit, offset);
+    const blogList = countAndBlogList.rows.map((blog) => blog.dataValues);
+    const count = countAndBlogList.count;
+    return { count, blogList };
 };
-module.exports.getBlogsByUserId = async (id) => {
-    const sequelizeBlogList = await blogRepo.getBlogsByUserId(id);
-    return sequelizeBlogList.map((blog) => blog.dataValues);
+module.exports.getBlogsByUserId = async (id, limit, offset) => {
+    const countAndBlogList = await blogRepo.getBlogsByUserId(id, limit, offset);
+
+    const blogList = countAndBlogList.rows.map((blog) => blog.dataValues);
+    const count = countAndBlogList.count;
+    return { count, blogList };
 };
 
 module.exports.getBlogById = async (id) => {

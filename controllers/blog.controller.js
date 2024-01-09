@@ -33,12 +33,12 @@ module.exports.getAllBlogs = async (req, res, next) => {
             Number(size)
         );
 
-        const sequelizeBlogList = await blogService.getAllBlogs(limit, offset);
-        const blogList = new blogDTO.GetAllBlogs(sequelizeBlogList);
+        const countAndBlogList = await blogService.getAllBlogs(limit, offset);
+        const blogList = new blogDTO.GetAllBlogs(countAndBlogList.blogList);
 
-        const formattedBlogList = formatData(req.format, blogList);
+        // const formattedCountAndBlogList = formatData(req.format, blogList);
 
-        return res.status(200).send(formattedBlogList);
+        return res.status(200).send(countAndBlogList);
     } catch (error) {
         return next(error);
     }

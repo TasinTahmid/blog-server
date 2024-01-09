@@ -7,15 +7,18 @@ module.exports.createBlog = async (blogData) => {
 };
 
 module.exports.getAllBlogs = async (limit, offset) => {
-    return await Blog.findAll({
+    const temp = await Blog.findAndCountAll({
         limit,
         offset,
         order: [["createdAt", "DESC"]],
     });
+    return temp;
 };
 
-module.exports.getBlogsByUserId = async (id) => {
-    return await Blog.findAll({
+module.exports.getBlogsByUserId = async (id, limit, offset) => {
+    return await Blog.findAndCountAll({
+        limit,
+        offset,
         where: { userId: id },
         order: [["createdAt", "DESC"]],
     });

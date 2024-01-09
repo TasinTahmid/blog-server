@@ -1,5 +1,6 @@
 const userService = require("../services/user.service");
 const blogService = require("../services/blog.service");
+const calcLimitAndOffset = require("../utils/calculateLimitAndOffset");
 const userDTO = require("../dto/user.dto");
 const formatData = require("../utils/formatData");
 
@@ -96,10 +97,19 @@ module.exports.deleteUserById = async (req, res, next) => {
 module.exports.getUserBlogsByUserId = async (req, res, next) => {
     try {
         const { id } = req.params;
+        const { page, size } = req.query;
+        const { limit, offset } = await calcLimitAndOffset(
+            Number(page),
+            Number(size)
+        );
 
-        const userBlogs = await blogService.getBlogsByUserId(id);
+        const countAndBlogList = await blogService.getBlogsByUserId(
+            id,
+            limit,
+            offset
+        );
 
-        return res.status(200).send(userBlogs);
+        return res.status(200).send(countAndBlogList);
     } catch (error) {
         return next(error);
     }
