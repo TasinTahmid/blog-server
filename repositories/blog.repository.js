@@ -1,4 +1,5 @@
 const Blog = require("../models/blog.model");
+const User = require("../models/user.model");
 
 module.exports.createBlog = async (blogData) => {
     const blog = await Blog.create(blogData);
@@ -11,6 +12,12 @@ module.exports.getAllBlogs = async (limit, offset) => {
         limit,
         offset,
         order: [["createdAt", "DESC"]],
+        include: [
+            {
+                model: User,
+                attributes: ["username"],
+            },
+        ],
     });
     return temp;
 };
@@ -21,11 +28,27 @@ module.exports.getBlogsByUserId = async (id, limit, offset) => {
         offset,
         where: { userId: id },
         order: [["createdAt", "DESC"]],
+        include: [
+            {
+                model: User,
+                attributes: ["username"],
+            },
+        ],
     });
 };
 
 module.exports.getBlogById = async (id) => {
-    return await Blog.findOne({ where: { id } });
+    const resp = await Blog.findOne({
+        where: { id },
+        include: [
+            {
+                model: User,
+                attributes: ["username"],
+            },
+        ],
+    });
+    console.log(resp);
+    return resp;
 };
 
 module.exports.updateBlogById = async (blog, blogData) => {

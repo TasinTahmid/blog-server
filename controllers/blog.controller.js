@@ -46,11 +46,11 @@ module.exports.getBlogById = async (req, res, next) => {
         const { id } = req.params;
 
         const sequelizeBlog = await blogService.getBlogById(id);
-        const blog = new blogDTO.BlogData(sequelizeBlog);
+        // const blog = new blogDTO.BlogData(sequelizeBlog);
 
-        const formattedBlog = formatData(req.format, blog);
+        // const formattedBlog = formatData(req.format, blog);
 
-        return res.status(200).send(formattedBlog);
+        return res.status(200).send(sequelizeBlog);
     } catch (error) {
         return next(error);
     }
